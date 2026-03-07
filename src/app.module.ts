@@ -10,11 +10,12 @@ import { appConfigSchema } from './config/config.types';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeConfigService } from './config/type-config.service';
 import { User } from './users/entities/user.entity';
+import { jwtConfig } from './config/jwt.confiq';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [typeOrmConfig],
+      load: [typeOrmConfig, jwtConfig],
       validationSchema: appConfigSchema,
       validationOptions: {
         abortEarly: true,

@@ -7,6 +7,16 @@ Content-Type:{{content-type}}
 
 {
     "name":"fake",
+    "email":"fakeq113@fake.com",
+    "password":"Fake123*"
+}
+
+### 
+# @name loginUser
+POST {{baseUrl}}/auth/login
+Content-Type:{{content-type}}
+
+{
     "email":"fake@fake.com",
     "password":"Fake123*"
 }

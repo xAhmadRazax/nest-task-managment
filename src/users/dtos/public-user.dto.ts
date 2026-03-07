@@ -7,6 +7,9 @@ export class PublicUser {
   @Expose()
   email: string;
 
-  @Expose()
-  jwtToken: string;
+  //   @Expose()
+  //   createdAt: Date;
+
+  //   @Expose()
+  //   updatedAt: Date;
 }

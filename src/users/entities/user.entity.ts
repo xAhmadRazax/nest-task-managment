@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 import {
   BeforeInsert,
   Column,
@@ -34,14 +34,6 @@ export class User {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({ nullable: true })
-  @IsOptional()
-  jwtToken?: string;
-
-  @Column({ nullable: true })
-  @IsOptional()
-  jwtExpiry?: Date;
 
   @BeforeInsert()
   normalizeEmail() {
