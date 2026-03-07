@@ -1,12 +1,20 @@
-import { IsEmail, IsString } from 'class-validator';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsEmail()
   @Index()
   email: string;
@@ -18,4 +26,25 @@ export class User {
   @Column()
   @IsString()
   password: string;
+
+  @Column()
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Column({ nullable: true })
+  @IsOptional()
+  jwtToken?: string;
+
+  @Column({ nullable: true })
+  @IsOptional()
+  jwtExpiry?: Date;
+
+  @BeforeInsert()
+  normalizeEmail() {
+    this.email = this.email.toLowerCase();
+  }
 }
