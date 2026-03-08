@@ -45,6 +45,9 @@ export class AuthService {
     };
   }
 
+  findMe(id: string) {
+    return this.userService.findById(id);
+  }
   private async hashPassword(password: string): Promise<string> {
     const hashedPassword = await bcrypt.hash(password, this.round);
     return hashedPassword;

@@ -7,10 +7,12 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeConfigService } from 'src/config/type-config.service';
+import { BlacklistTokenService } from './blacklist-token.service';
+import { BlacklistTokens } from './entities/blackListToken.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, BlacklistTokens]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -21,7 +23,7 @@ import { TypeConfigService } from 'src/config/type-config.service';
     }),
     UsersModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, BlacklistTokenService],
   controllers: [AuthController],
 })
 export class AuthModule {}

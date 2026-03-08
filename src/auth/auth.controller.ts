@@ -1,16 +1,28 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { Serialize } from 'src/intercepts/serializedPublicUserIntercept';
-import { PublicUser } from 'src/users/dtos/public-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
-import { User } from 'src/users/entities/user.entity';
 import { AuthResponseDto } from './dtos/auth-response.dto';
+import { BlacklistTokenService } from './blacklist-token.service';
+import { GetAccessToken } from './decorators/get-accesstoken.decorator';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 
 @Controller({ path: 'auth', version: '1' })
 @Serialize(AuthResponseDto)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly blacklistTokenService: BlacklistTokenService,
+  ) {}
 
   @Post('/register')
   register(@Body() createUserDto: CreateUserDto) {
@@ -21,7 +33,20 @@ export class AuthController {
   @HttpCode(200)
   async login(@Body() loginUserDto: LoginUserDto) {
     const res = await this.authService.loginUser(loginUserDto);
-    console.log(res);
     return { user: res.user, accessToken: res.accessToken };
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  logout(@GetAccessToken() token: string) {
+    return this.blacklistTokenService.blacklistToken(token);
+  }
+
+  @Get('/me')
+  @UseGuards(AuthGuard)
+  async getMe(@GetUserId() id: string) {
+    const user = await this.authService.findMe(id);
+    return { user };
   }
 }

@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeConfigService } from './config/type-config.service';
 import { User } from './users/entities/user.entity';
 import { jwtConfig } from './config/jwt.confiq';
+import { BlacklistTokens } from './auth/entities/blackListToken.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { jwtConfig } from './config/jwt.confiq';
       inject: [ConfigService],
       useFactory: async (configService: TypeConfigService) => ({
         ...(await configService.get('database')),
-        entities: [User],
+        entities: [User, BlacklistTokens],
         synchronize: true,
       }),
     }),

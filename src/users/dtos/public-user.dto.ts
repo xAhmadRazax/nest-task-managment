@@ -7,9 +7,9 @@ export class PublicUser {
   @Expose()
   email: string;
 
-  //   @Expose()
-  //   createdAt: Date;
+  @Expose()
+  createdAt: Date;
 
-  //   @Expose()
-  //   updatedAt: Date;
+  @Expose()
+  updatedAt: Date;
 }
