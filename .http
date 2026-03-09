@@ -18,7 +18,7 @@ Content-Type:{{content-type}}
 
 {
     "email":"fake@fake.com",
-    "password":"Fakefake12*"
+    "password":"Fake123*"
 }
 
 ### setting access token
@@ -34,6 +34,28 @@ Authorization: Bearer {{accessToken}}
 {
     "currentPassword":"Fake123*",
     "newPassword":"Fakefake12*"
+}
+
+### 
+# @name forgotPassword
+POST {{baseUrl}}/auth/forgot-password
+Content-Type:{{content-type}}
+
+{
+    "email":"fake@fake.com"
+}
+
+### setting access token
+@passwordResetUrl = {{forgotPassword.response.body.passwordResetUrl}}
+
+
+### 
+# @name resetPassword
+POST {{passwordResetUrl}}
+Content-Type:{{content-type}}
+
+{
+    "password":"Fake123*"
 }
 
 

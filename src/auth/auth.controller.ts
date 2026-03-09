@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -16,6 +18,9 @@ import { GetAccessToken } from './decorators/get-accesstoken.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import type { Request } from 'express';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Controller({ path: 'auth', version: '1' })
 @Serialize(AuthResponseDto)
@@ -38,10 +43,26 @@ export class AuthController {
   }
 
   @Post('/forgot-password')
-  async forgotPassword() {}
+  async forgotPassword(
+    @Body() { email }: ForgotPasswordDto,
+    @Req() req: Request,
+  ) {
+    const token = await this.authService.forgotPassword(email);
+    if (!token) {
+      return;
+    }
+    const url = `${req.protocol}://${req.get('host')}/api/v1/auth/reset-password/${token}`;
+    return { passwordResetUrl: url };
+  }
 
-  @Post('/reset=password')
-  async resetPassword() {}
+  @Post('/reset-password/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body() resetpasswordDto: ResetPasswordDto,
+  ) {
+    const user = await this.authService.resetPassword(token, resetpasswordDto);
+    return { user };
+  }
 
   @UseGuards(AuthGuard)
   @Post('/change-password')

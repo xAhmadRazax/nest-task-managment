@@ -38,6 +38,12 @@ export class User {
   @Column({ nullable: true })
   passwordChangedAt: Date;
 
+  @Column({ type: 'varchar', nullable: true })
+  passwordResetToken: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  passwordResetTokenExpiry: Date | null;
+
   @BeforeInsert()
   normalizeEmail() {
     this.email = this.email.toLowerCase();

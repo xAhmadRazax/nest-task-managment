@@ -1,13 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import bcrypt from 'bcryptjs';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import crypto from 'crypto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -69,6 +75,51 @@ export class AuthService {
     user.passwordChangedAt = new Date();
 
     await this.userRepo.save(user);
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.userService.findOne(email);
+    if (!user) {
+      return;
+    }
+
+    const passwordResetToken = crypto.randomBytes(32).toString('hex');
+    const hashedPasswordToken = crypto
+      .createHash('sha256')
+      .update(passwordResetToken)
+      .digest('hex');
+
+    user.passwordResetToken = hashedPasswordToken;
+    user.passwordResetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+    user.passwordChangedAt = new Date();
+
+    await this.userRepo.save(user);
+
+    return passwordResetToken;
+  }
+
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+    const hashedPasswordResetToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+
+    const user = await this.userRepo.findOne({
+      where: {
+        passwordResetToken: hashedPasswordResetToken,
+        passwordResetTokenExpiry: MoreThan(new Date()),
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('invalid token or token expires');
+    }
+
+    user.password = await this.hashPassword(resetPasswordDto.password);
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpiry = null;
+    user.passwordChangedAt = new Date();
+    return this.userRepo.save(user);
   }
 
   findMe(id: string) {
