@@ -1,9 +1,15 @@
-import { IsEmail, IsNotEmpty, IsString, Matches, Min } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 
 export class LoginUserDto {
   @IsString()
   @IsNotEmpty()
-  @Min(6)
+  @MinLength(6)
   @Matches(/[A-Z]/, {
     message: 'Password must contain at least 1 uppercase letter',
   })

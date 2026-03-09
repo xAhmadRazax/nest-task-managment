@@ -35,6 +35,9 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ nullable: true })
+  passwordChangedAt: Date;
+
   @BeforeInsert()
   normalizeEmail() {
     this.email = this.email.toLowerCase();

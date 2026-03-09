@@ -7,6 +7,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import bcrypt from 'bcryptjs';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from './dtos/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -43,6 +44,31 @@ export class AuthService {
       accessToken: token,
       user: user,
     };
+  }
+
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    const user = await this.findMe(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('user no longer exist');
+    }
+
+    if (
+      !(await this.comparePassword(
+        changePasswordDto.currentPassword,
+        user.password,
+      ))
+    ) {
+      throw new UnauthorizedException('Password is wrong');
+    }
+
+    const hashedPassword = await this.hashPassword(
+      changePasswordDto.newPassword,
+    );
+    user.password = hashedPassword;
+    user.passwordChangedAt = new Date();
+
+    await this.userRepo.save(user);
   }
 
   findMe(id: string) {

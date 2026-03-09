@@ -18,11 +18,24 @@ Content-Type:{{content-type}}
 
 {
     "email":"fake@fake.com",
-    "password":"Fake123*"
+    "password":"Fakefake12*"
 }
 
 ### setting access token
 @accessToken = {{loginUser.response.body.accessToken}}
+
+
+### 
+# @name changePassword
+POST {{baseUrl}}/auth/change-password
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "currentPassword":"Fake123*",
+    "newPassword":"Fakefake12*"
+}
+
 
 
 ### logout user

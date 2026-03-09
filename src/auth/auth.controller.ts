@@ -15,6 +15,7 @@ import { BlacklistTokenService } from './blacklist-token.service';
 import { GetAccessToken } from './decorators/get-accesstoken.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { ChangePasswordDto } from './dtos/change-password.dto';
 
 @Controller({ path: 'auth', version: '1' })
 @Serialize(AuthResponseDto)
@@ -34,6 +35,22 @@ export class AuthController {
   async login(@Body() loginUserDto: LoginUserDto) {
     const res = await this.authService.loginUser(loginUserDto);
     return { user: res.user, accessToken: res.accessToken };
+  }
+
+  @Post('/forgot-password')
+  async forgotPassword() {}
+
+  @Post('/reset=password')
+  async resetPassword() {}
+
+  @UseGuards(AuthGuard)
+  @Post('/change-password')
+  @HttpCode(204)
+  async changePassword(
+    @GetUserId() id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(id, changePasswordDto);
   }
 
   @Post('logout')
