@@ -32,12 +32,18 @@ export class AuthGuard implements CanActivate {
       // is the key that was passsed in the JwtModule
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       const user = await this.userService.findOne(payload.email);
+      console.log(user, payload);
+
+      if (!user) {
+        await this.blackListTokenService.blacklistToken(token);
+        throw new UnauthorizedException();
+      }
 
       if (
-        !user ||
-        (user &&
-          payload.iat &&
-          user.passwordChangedAt.getTime() / 1000 > payload.iat)
+        user &&
+        user.passwordChangedAt &&
+        payload.iat &&
+        user.passwordChangedAt.getTime() / 1000 > payload.iat
       ) {
         await this.blackListTokenService.blacklistToken(token);
         throw new UnauthorizedException();
@@ -45,14 +51,19 @@ export class AuthGuard implements CanActivate {
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['user'] = payload;
-    } catch {
+    } catch (err) {
+      console.log(err);
       throw new UnauthorizedException();
     }
     return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const token =
+      (request?.cookies['token'] as string) ||
+      request.headers.authorization?.split(' ')[1];
+
+    console.log(token);
+    return token ?? undefined;
   }
 }

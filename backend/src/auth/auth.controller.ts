@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -19,8 +20,9 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { COOKIE_OPTIONS } from 'src/common/constants';
 
 @Controller({ path: 'auth', version: '1' })
 @Serialize(AuthResponseDto)
@@ -37,9 +39,15 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(200)
-  async login(@Body() loginUserDto: LoginUserDto) {
-    const res = await this.authService.loginUser(loginUserDto);
-    return { user: res.user, accessToken: res.accessToken };
+  async login(
+    @Res({ passthrough: true }) response: Response,
+    @Body() loginUserDto: LoginUserDto,
+  ) {
+    const data = await this.authService.loginUser(loginUserDto);
+
+    response.cookie('token', data.accessToken, COOKIE_OPTIONS);
+
+    return { user: data.user, accessToken: data.accessToken };
   }
 
   @Post('/forgot-password')

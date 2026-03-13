@@ -7,7 +7,7 @@ Content-Type:{{content-type}}
 
 {
     "name":"fake",
-    "email":"fakeq113@fake.com",
+    "email":"fake@fake.com",
     "password":"Fake123*"
 }
 
