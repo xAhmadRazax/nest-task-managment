@@ -26,8 +26,12 @@ export async function loginApi({
   return data
 }
 
-export async function getMe(): Promise<User> {
+export async function getMeApi(): Promise<User> {
   console.log('ACTUAL FETCH HAPPENING')
   const { data } = await axios.get('/auth/me')
   return data.user
+}
+
+export async function logoutApi() {
+  await axios.post('/auth/logout')
 }

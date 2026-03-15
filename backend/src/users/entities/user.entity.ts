@@ -1,10 +1,12 @@
 import { IsEmail, IsString } from 'class-validator';
+import { Task } from 'src/tasks/entities/task.entity';
 import {
   BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -43,6 +45,9 @@ export class User {
 
   @Column({ type: 'timestamp', nullable: true })
   passwordResetTokenExpiry: Date | null;
+
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
 
   @BeforeInsert()
   normalizeEmail() {

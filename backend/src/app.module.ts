@@ -12,6 +12,7 @@ import { TypeConfigService } from './config/type-config.service';
 import { User } from './users/entities/user.entity';
 import { jwtConfig } from './config/jwt.confiq';
 import { BlacklistTokens } from './auth/entities/blackListToken.entity';
+import { Task } from './tasks/entities/task.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { BlacklistTokens } from './auth/entities/blackListToken.entity';
       inject: [ConfigService],
       useFactory: async (configService: TypeConfigService) => ({
         ...(await configService.get('database')),
-        entities: [User, BlacklistTokens],
+        entities: [User, BlacklistTokens, Task],
         synchronize: true,
       }),
     }),

@@ -6,7 +6,7 @@ import { useLogin } from '../hooks/useLogin'
 import type { User } from 'types/user.type'
 import { useQueryClient } from '@tanstack/react-query'
 import { meQueryOptions } from '#/queries/auth.query'
-import { Route } from '#/routes/(auth)/login/route'
+import { Route } from '#/routes/_auth/login/route'
 import { CardWrapper } from '#/components/CardWrapper'
 
 export const LoginForm = () => {

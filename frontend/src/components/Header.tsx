@@ -11,7 +11,7 @@ export const Header = () => {
       <Container className="flex items-center justify-between ">
         <Link
           to="/"
-          className="text-lg  sm:text-xl font-semibold text-emerald-200"
+          className="text-lg  sm:text-xl font-semibold text-primary-foreground"
         >
           <h1>R-N ToDos</h1>
         </Link>

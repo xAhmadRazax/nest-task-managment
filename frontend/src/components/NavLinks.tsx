@@ -17,7 +17,7 @@ export const NavLinks = () => {
           <Link
             // to="/register"
             to="/login"
-            className="bg-white/10 border border-white/20 backdrop:md text-emerald-200 hover:bg-white/20 px-4 py-2 transition-all rounded-3xl font-medium"
+            className="bg-white/10 border border-white/20 backdrop:md text-primary-foreground hover:bg-white/20 px-4 py-2 transition-all rounded-3xl font-medium"
           >
             Manage Your Day
           </Link>

@@ -45,7 +45,10 @@ export class AuthController {
   ) {
     const data = await this.authService.loginUser(loginUserDto);
 
-    response.cookie('token', data.accessToken, COOKIE_OPTIONS);
+    response.cookie('token', data.accessToken, {
+      ...COOKIE_OPTIONS,
+      maxAge: parseInt(process.env.JWT_EXPIRY!) * 24 * 60 * 60 * 1000,
+    });
 
     return { user: data.user, accessToken: data.accessToken };
   }
@@ -85,8 +88,13 @@ export class AuthController {
   @Post('logout')
   @UseGuards(AuthGuard)
   @HttpCode(204)
-  logout(@GetAccessToken() token: string) {
-    return this.blacklistTokenService.blacklistToken(token);
+  async logout(
+    @Res({ passthrough: true }) res: Response,
+    @GetAccessToken() token: string,
+  ) {
+    console.log(token);
+    await this.blacklistTokenService.blacklistToken(token);
+    return res.clearCookie('token', COOKIE_OPTIONS);
   }
 
   @Get('/me')

@@ -76,3 +76,63 @@ Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
 
+### create task
+# @name tasks
+POST {{baseUrl}}/tasks
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "title":"learn NestJs 2",
+    "description":"ja",
+    "targetDate":"2026-03-29T02:21:15.000Z",
+    "subTasks":[{
+    "title":"learn NestJs",
+    "description":"ja",
+    "targetDate":"2026-03-29T02:21:15.000Z"}
+    ]
+
+}
+
+
+### find All Task
+# @name getAllTasks
+Get {{baseUrl}}/tasks
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+
+
+### find a Task
+# @name getATasks
+Get {{baseUrl}}/tasks/3
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+
+
+
+
+### add subTasks
+# @name addSubTasks
+Post {{baseUrl}}/tasks/4/subTasks
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+[{
+    "title":"learn about DTO",
+    "description":"ja",
+    "targetDate":"2026-03-28T02:21:15.000Z"
+}
+]
+
+
+### change task status
+# @name changeTaskStatus
+PATCH  {{baseUrl}}/tasks/3/status
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "newStatus":"ABANDONED"
+}

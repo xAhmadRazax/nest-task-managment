@@ -8,7 +8,7 @@ const loginSearchSchema = z.object({
   redirect: z.string().optional().catch('/'),
 })
 
-export const Route = createFileRoute('/(auth)/login')({
+export const Route = createFileRoute('/_auth/login')({
   component: RouteComponent,
   beforeLoad: async ({ context: { user } }) => {
     if (user?.email) {
@@ -20,5 +20,9 @@ export const Route = createFileRoute('/(auth)/login')({
 })
 
 function RouteComponent() {
-  return <Login />
+  return (
+    <div className=" flex items-center justify-center">
+      <Login />
+    </div>
+  )
 }

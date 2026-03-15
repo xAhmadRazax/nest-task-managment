@@ -9,18 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as publicRouteRouteImport } from './routes/(public)/route'
-import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
-import { Route as authRegisterRouteRouteImport } from './routes/(auth)/register/route'
-import { Route as authLoginRouteRouteImport } from './routes/(auth)/login/route'
+import { Route as AuthRegisterRouteRouteImport } from './routes/_auth/register/route'
+import { Route as AuthProfileRouteRouteImport } from './routes/_auth/profile/route'
+import { Route as AuthLoginRouteRouteImport } from './routes/_auth/login/route'
+import { Route as AuthProfileIndexRouteImport } from './routes/_auth/profile/index'
 
-const publicRouteRoute = publicRouteRouteImport.update({
-  id: '/(public)',
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authRouteRoute = authRouteRouteImport.update({
-  id: '/(auth)',
+const publicRouteRoute = publicRouteRouteImport.update({
+  id: '/(public)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const publicIndexRoute = publicIndexRouteImport.update({
@@ -28,68 +30,85 @@ const publicIndexRoute = publicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => publicRouteRoute,
 } as any)
-const authRegisterRouteRoute = authRegisterRouteRouteImport.update({
+const AuthRegisterRouteRoute = AuthRegisterRouteRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => authRouteRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
-const authLoginRouteRoute = authLoginRouteRouteImport.update({
+const AuthProfileRouteRoute = AuthProfileRouteRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthLoginRouteRoute = AuthLoginRouteRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => authRouteRoute,
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthProfileIndexRoute = AuthProfileIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthProfileRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/login': typeof authLoginRouteRoute
-  '/register': typeof authRegisterRouteRoute
   '/': typeof publicIndexRoute
+  '/login': typeof AuthLoginRouteRoute
+  '/profile': typeof AuthProfileRouteRouteWithChildren
+  '/register': typeof AuthRegisterRouteRoute
+  '/profile/': typeof AuthProfileIndexRoute
 }
 export interface FileRoutesByTo {
-  '/login': typeof authLoginRouteRoute
-  '/register': typeof authRegisterRouteRoute
   '/': typeof publicIndexRoute
+  '/login': typeof AuthLoginRouteRoute
+  '/register': typeof AuthRegisterRouteRoute
+  '/profile': typeof AuthProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(auth)': typeof authRouteRouteWithChildren
   '/(public)': typeof publicRouteRouteWithChildren
-  '/(auth)/login': typeof authLoginRouteRoute
-  '/(auth)/register': typeof authRegisterRouteRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRouteRoute
+  '/_auth/profile': typeof AuthProfileRouteRouteWithChildren
+  '/_auth/register': typeof AuthRegisterRouteRoute
   '/(public)/': typeof publicIndexRoute
+  '/_auth/profile/': typeof AuthProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/register' | '/'
+  fullPaths: '/' | '/login' | '/profile' | '/register' | '/profile/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/register' | '/'
+  to: '/' | '/login' | '/register' | '/profile'
   id:
     | '__root__'
-    | '/(auth)'
     | '/(public)'
-    | '/(auth)/login'
-    | '/(auth)/register'
+    | '/_auth'
+    | '/_auth/login'
+    | '/_auth/profile'
+    | '/_auth/register'
     | '/(public)/'
+    | '/_auth/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  authRouteRoute: typeof authRouteRouteWithChildren
   publicRouteRoute: typeof publicRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(public)': {
       id: '/(public)'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof publicRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)': {
-      id: '/(auth)'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(public)/': {
@@ -99,36 +118,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicIndexRouteImport
       parentRoute: typeof publicRouteRoute
     }
-    '/(auth)/register': {
-      id: '/(auth)/register'
+    '/_auth/register': {
+      id: '/_auth/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof authRegisterRouteRouteImport
-      parentRoute: typeof authRouteRoute
+      preLoaderRoute: typeof AuthRegisterRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
-    '/(auth)/login': {
-      id: '/(auth)/login'
+    '/_auth/profile': {
+      id: '/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof authLoginRouteRouteImport
-      parentRoute: typeof authRouteRoute
+      preLoaderRoute: typeof AuthLoginRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/profile/': {
+      id: '/_auth/profile/'
+      path: '/'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof AuthProfileIndexRouteImport
+      parentRoute: typeof AuthProfileRouteRoute
     }
   }
 }
-
-interface authRouteRouteChildren {
-  authLoginRouteRoute: typeof authLoginRouteRoute
-  authRegisterRouteRoute: typeof authRegisterRouteRoute
-}
-
-const authRouteRouteChildren: authRouteRouteChildren = {
-  authLoginRouteRoute: authLoginRouteRoute,
-  authRegisterRouteRoute: authRegisterRouteRoute,
-}
-
-const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
-  authRouteRouteChildren,
-)
 
 interface publicRouteRouteChildren {
   publicIndexRoute: typeof publicIndexRoute
@@ -142,9 +161,36 @@ const publicRouteRouteWithChildren = publicRouteRoute._addFileChildren(
   publicRouteRouteChildren,
 )
 
+interface AuthProfileRouteRouteChildren {
+  AuthProfileIndexRoute: typeof AuthProfileIndexRoute
+}
+
+const AuthProfileRouteRouteChildren: AuthProfileRouteRouteChildren = {
+  AuthProfileIndexRoute: AuthProfileIndexRoute,
+}
+
+const AuthProfileRouteRouteWithChildren =
+  AuthProfileRouteRoute._addFileChildren(AuthProfileRouteRouteChildren)
+
+interface AuthRouteRouteChildren {
+  AuthLoginRouteRoute: typeof AuthLoginRouteRoute
+  AuthProfileRouteRoute: typeof AuthProfileRouteRouteWithChildren
+  AuthRegisterRouteRoute: typeof AuthRegisterRouteRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRouteRoute: AuthLoginRouteRoute,
+  AuthProfileRouteRoute: AuthProfileRouteRouteWithChildren,
+  AuthRegisterRouteRoute: AuthRegisterRouteRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  authRouteRoute: authRouteRouteWithChildren,
   publicRouteRoute: publicRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
