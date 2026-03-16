@@ -1,9 +1,10 @@
-import { Container } from '#/components/Container'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
 import { useRef } from 'react'
-import { CardWrapper } from '#/components/CardWrapper'
 import { useRegister } from '../hooks/useRegister'
+import { FieldWrapper } from '#/components/InputWrapper'
+import { FieldLabel } from '#/components/ui/field'
+import { InputField } from '#/components/InputField'
+import { Button } from '#/components/Button'
 
 export const RegisterForm = () => {
   const navigate = useNavigate()
@@ -32,97 +33,35 @@ export const RegisterForm = () => {
   }
 
   return (
-    <section onSubmit={submitHandler} className="w-full">
-      <Container className="max-w-[95%] sm:w-md mt-5  w-full mx-auto ">
-        <CardWrapper>
-          <Link to=".." title="go-back">
-            <ArrowLeft className="text-slate-200" />
-          </Link>
+    <form
+      onSubmit={submitHandler}
+      action=""
+      method="post"
+      className="text-slate-200 mt-12 space-y-12"
+    >
+      <FieldWrapper>
+        <FieldLabel htmlFor="name">Name</FieldLabel>
+        <InputField id="name" name="name" type="input" ref={nameRef} />
+      </FieldWrapper>
 
-          <h2 className="text-center text-3xl font-bold text-slate-200">
-            Create New Account
-          </h2>
+      <FieldWrapper>
+        <FieldLabel htmlFor="email">Email</FieldLabel>
+        <InputField id="email" name="email" type="input" ref={emailRef} />
+      </FieldWrapper>
 
-          <form
-            action=""
-            method="post"
-            className="text-slate-200 mt-12 space-y-12"
-          >
-            <div
-              className="flex flex-col gap-1 bg-emerald-200/10 rounded-xl px-4 py-2.5 justify-center backdrop-blur-3xl 
-          ring-1 ring-emerald-500/30"
-            >
-              <label
-                htmlFor="name"
-                className="text-sm font-bold text-slate-300/70 "
-              >
-                Name
-              </label>
-              <input
-                type="type"
-                name="name"
-                id="name"
-                ref={nameRef}
-                className="block  ring-emerald-950 outline-0 border-0 grow px-2 py-1 rounded-lg ring-1 focus:ring-emerald-950/80"
-              />
-            </div>
+      <FieldWrapper>
+        <FieldLabel htmlFor="password">Password</FieldLabel>
+        <InputField
+          id="password"
+          name="password"
+          type="password"
+          ref={passwordRef}
+        />
+      </FieldWrapper>
 
-            <div
-              className="flex flex-col gap-1 bg-emerald-200/10 rounded-xl px-4 py-2.5 justify-center backdrop-blur-3xl 
-          ring-1 ring-emerald-500/30"
-            >
-              <label
-                htmlFor="email"
-                className="text-sm font-bold text-slate-300/70 "
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                ref={emailRef}
-                className="block  ring-emerald-950 outline-0 border-0 grow px-2 py-1 rounded-lg ring-1 focus:ring-emerald-950/80"
-              />
-            </div>
-
-            <div
-              className="flex flex-col gap-1 bg-emerald-200/10 rounded-xl px-4 py-2.5 justify-center backdrop-blur-3xl 
-          ring-1 ring-emerald-500/30  "
-            >
-              <label
-                htmlFor="password"
-                className="text-sm font-bold text-slate-300/70 "
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                ref={passwordRef}
-                className="block   ring-emerald-950 outline-0 border-0 grow px-2 py-1 rounded-lg ring-1 focus:ring-emerald-950/80"
-              />
-            </div>
-
-            <div className="button-container flex ">
-              <button className="block w-full bg-emerald-200/10 cursor-pointer ring-1 ring-emerald-500/30 backdrop:md text-slate-200 hover:bg-emerald-200/20 px-4 py-2 transition-all  rounded-xl font-medium">
-                Register
-              </button>
-            </div>
-          </form>
-
-          <div>
-            <div className="text-emerald-700 mx-auto mt-6 mb-3 border-b w-2/5"></div>
-            <Link
-              to="/"
-              className="text-emerald-400/50 text-center block font-semibold underline"
-            >
-              Already have an account? Login here
-            </Link>
-          </div>
-        </CardWrapper>
-      </Container>
-    </section>
+      <div className="button-container flex w-full ">
+        <Button type="button">Register</Button>
+      </div>
+    </form>
   )
 }
