@@ -16,6 +16,8 @@ const config = defineConfig({
     viteReact(),
   ],
   server: {
+    host: true,
+
     port: 5173,
     proxy: {
       '/api': {
