@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_auth/login')({
 
 function RouteComponent() {
   return (
-    <div className=" flex items-center justify-center">
+    <div className="min-h-svh flex items-center justify-center">
       <Login />
     </div>
   )

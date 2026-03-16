@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_auth/register')({
 
 function RouteComponent() {
   return (
-    <div className=" flex items-center justify-center">
+    <div className="min-h-svh flex items-center justify-center">
       <Register />
     </div>
   )
