@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -23,5 +24,6 @@ export class LoginUserDto {
 
   @IsEmail()
   @IsNotEmpty()
+  @Transform(({ value }) => String(value).toString())
   email: string;
 }
