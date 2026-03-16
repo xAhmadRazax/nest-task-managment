@@ -7,12 +7,14 @@ export interface ButtonProps {
   children: React.ReactNode
   to?: LinkProps['to']
   className?: string
+  isSubmitButton?: boolean
   type?: 'button' | 'link'
 }
 
 export const Button = ({
   to,
   type = 'link',
+  isSubmitButton = true,
   children,
   className,
 }: ButtonProps) => {
@@ -20,6 +22,7 @@ export const Button = ({
     <>
       {type === 'button' ? (
         <ShadCnButton
+          type={isSubmitButton ? 'submit' : 'button'}
           className={cn(
             'w-full bg-primary/10 cursor-pointer ring-1 ring-primary/50 backdrop-blur-3xl  hover:bg-primary/20 px-4 py-2 transition-all rounded-md font-medium',
             className,
