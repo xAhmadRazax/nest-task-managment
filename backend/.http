@@ -94,6 +94,24 @@ Authorization: Bearer {{accessToken}}
 
 }
 
+### update task
+# @name updateTask
+PATCH {{baseUrl}}/tasks/15
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "title":"learn react Js ",
+    "description":"ja",
+    "targetDate":"2026-03-29T02:21:15.000Z",
+    "subTasks":[{
+        "id":16,
+    "title":"learn learn 1 Caching tool kit and tools"
+    }
+    ]
+
+}
+
 
 ### find All Task
 # @name getAllTasks
@@ -105,7 +123,7 @@ Authorization: Bearer {{accessToken}}
 
 ### find a Task
 # @name getATasks
-Get {{baseUrl}}/tasks/3
+Get {{baseUrl}}/tasks/150
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 

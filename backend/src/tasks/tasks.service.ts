@@ -6,9 +6,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { DeepPartial, IsNull, Repository } from 'typeorm';
-import { CreateTaskDto } from './dtos/createTask.dto';
+import { CreateTaskDto } from './dtos/create-task.dto';
 import { TaskStatus } from './types/task.type';
 import { CreateSubtaskDto } from './dtos/create-subtasks.dto';
+import { UpdateTaskDto } from './dtos/update-task-dto';
 
 @Injectable()
 export class TasksService {
@@ -24,11 +25,12 @@ export class TasksService {
   }
 
   async findOne(userId: string, id: string) {
-    const task = await this.taskRepo.findOne({
+    const [task] = await this.taskRepo.find({
       where: {
         id,
         user: { id: userId },
       },
+      take: 1,
       relations: ['subTasks', 'subTasks.user', 'user'],
     });
 
@@ -54,6 +56,48 @@ export class TasksService {
     }
 
     return this.findOne(userId, task.id);
+  }
+
+  async updateTask(
+    userId: string,
+    taskId: string,
+    updateTaskDto: UpdateTaskDto,
+  ) {
+    this.removeUndefinedFields(updateTaskDto);
+    if (Object.keys(updateTaskDto).length === 0) {
+      throw new BadRequestException('No update fields provided');
+    }
+
+    const task = await this.findOne(userId, taskId);
+
+    if (updateTaskDto.subTasks) {
+      this.removeUndefinedFields(updateTaskDto.subTasks);
+      const subTaskUpdates = new Map(
+        updateTaskDto.subTasks.map((t) => [t.id, t]),
+      );
+
+      const subTaskToUpdates = task.subTasks.reduce((accArr, subTask) => {
+        const taskUpdates = subTaskUpdates.get(+subTask.id);
+
+        if (taskUpdates) {
+          Object.assign(subTask, taskUpdates);
+
+          accArr.push(subTask);
+        }
+        return accArr;
+      }, [] as Task[]);
+
+      if (subTaskToUpdates.length > 0) {
+        await this.taskRepo.save(subTaskToUpdates);
+      }
+      delete updateTaskDto.subTasks;
+    }
+    if (Object.keys(updateTaskDto).length > 0) {
+      Object.assign(task, updateTaskDto);
+      await this.taskRepo.save(task);
+    }
+
+    return this.findOne(userId, taskId);
   }
 
   async addSubTasks(
@@ -157,5 +201,21 @@ export class TasksService {
         parent: parentTask,
       };
     });
+  }
+
+  private removeUndefinedFields(
+    data: Record<string, any> | Record<string, any>[],
+  ) {
+    if (Array.isArray(data)) {
+      data.forEach((el) => {
+        for (const key in el) {
+          if (!el[key]) delete el[key];
+        }
+      });
+    } else {
+      for (const key in data) {
+        if (!data[key]) delete data[key];
+      }
+    }
   }
 }
