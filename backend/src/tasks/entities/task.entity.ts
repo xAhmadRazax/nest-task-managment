@@ -38,11 +38,12 @@ export class Task {
   @Column({ nullable: true })
   completedAt?: Date;
 
-  @ManyToOne(() => Task, (task) => task.subTasks, { nullable: true })
-  parent: Task;
-
-  @OneToMany(() => Task, (task) => task.parent, {
+  @ManyToOne(() => Task, (task) => task.subTasks, {
+    nullable: true,
     onDelete: 'CASCADE',
   })
+  parent: Task;
+
+  @OneToMany(() => Task, (task) => task.parent)
   subTasks: Task[];
 }

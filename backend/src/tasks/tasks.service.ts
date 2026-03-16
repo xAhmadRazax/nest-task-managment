@@ -123,6 +123,10 @@ export class TasksService {
     return this.taskRepo.save(taskWithUpdatedState);
   }
 
+  async deleteTask(taskId: string) {
+    return this.taskRepo.delete(taskId);
+  }
+
   private validTransition(
     currentStatus: TaskStatus,
     newStatus: TaskStatus,

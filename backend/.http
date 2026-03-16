@@ -154,3 +154,9 @@ Authorization: Bearer {{accessToken}}
 {
     "newStatus":"ABANDONED"
 }
+
+### delete Task
+# @name deleteTask
+Delete {{baseUrl}}/tasks/15
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
