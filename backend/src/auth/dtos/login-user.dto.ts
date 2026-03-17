@@ -24,6 +24,6 @@ export class LoginUserDto {
 
   @IsEmail()
   @IsNotEmpty()
-  @Transform(({ value }) => String(value).toString())
+  @Transform(({ value }) => String(value).toLowerCase())
   email: string;
 }
