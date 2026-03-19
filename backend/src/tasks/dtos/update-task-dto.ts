@@ -48,5 +48,5 @@ export class UpdateSubtaskDto {
   @IsOptional()
   @Type(() => Date)
   @IsDate()
-  targetDate?: Date;
+  dueDate?: Date;
 }

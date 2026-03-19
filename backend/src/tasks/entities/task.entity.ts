@@ -24,7 +24,7 @@ export class Task {
   description: string;
 
   @Column()
-  targetDate: Date;
+  dueDate: Date;
 
   @Column({ type: 'enum', default: TaskStatus.OPEN, enum: TaskStatus })
   status: TaskStatus;

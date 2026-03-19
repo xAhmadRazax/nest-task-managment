@@ -19,7 +19,7 @@ export class CreateTaskDto {
 
   @Type(() => Date)
   @IsDate()
-  targetDate: Date;
+  dueDate: Date;
 
   @IsOptional()
   @Type(() => CreateSubtaskDto)
