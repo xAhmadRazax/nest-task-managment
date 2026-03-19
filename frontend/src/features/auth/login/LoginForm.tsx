@@ -42,7 +42,7 @@ export const LoginForm = () => {
       onSubmit={submitHandler}
       action=""
       method="post"
-      className=" mt-12 space-y-12"
+      className=" mt-12 space-y-6"
     >
       <FieldWrapper>
         <FieldLabel htmlFor="email">Email</FieldLabel>

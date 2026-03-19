@@ -17,7 +17,6 @@ import { Route as AuthProfileRouteRouteImport } from './routes/_auth/profile/rou
 import { Route as AuthLoginRouteRouteImport } from './routes/_auth/login/route'
 import { Route as publicTasksRouteRouteImport } from './routes/(public)/tasks/route'
 import { Route as AuthProfileIndexRouteImport } from './routes/_auth/profile/index'
-import { Route as publicTasksIndexRouteImport } from './routes/(public)/tasks/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
@@ -57,52 +56,38 @@ const AuthProfileIndexRoute = AuthProfileIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthProfileRouteRoute,
 } as any)
-const publicTasksIndexRoute = publicTasksIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => publicTasksRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
-  '/tasks': typeof publicTasksRouteRouteWithChildren
+  '/tasks': typeof publicTasksRouteRoute
   '/login': typeof AuthLoginRouteRoute
   '/profile': typeof AuthProfileRouteRouteWithChildren
   '/register': typeof AuthRegisterRouteRoute
-  '/tasks/': typeof publicTasksIndexRoute
   '/profile/': typeof AuthProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
+  '/tasks': typeof publicTasksRouteRoute
   '/login': typeof AuthLoginRouteRoute
   '/register': typeof AuthRegisterRouteRoute
-  '/tasks': typeof publicTasksIndexRoute
   '/profile': typeof AuthProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(public)': typeof publicRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/(public)/tasks': typeof publicTasksRouteRouteWithChildren
+  '/(public)/tasks': typeof publicTasksRouteRoute
   '/_auth/login': typeof AuthLoginRouteRoute
   '/_auth/profile': typeof AuthProfileRouteRouteWithChildren
   '/_auth/register': typeof AuthRegisterRouteRoute
   '/(public)/': typeof publicIndexRoute
-  '/(public)/tasks/': typeof publicTasksIndexRoute
   '/_auth/profile/': typeof AuthProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/tasks'
-    | '/login'
-    | '/profile'
-    | '/register'
-    | '/tasks/'
-    | '/profile/'
+  fullPaths: '/' | '/tasks' | '/login' | '/profile' | '/register' | '/profile/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/tasks' | '/profile'
+  to: '/' | '/tasks' | '/login' | '/register' | '/profile'
   id:
     | '__root__'
     | '/(public)'
@@ -112,7 +97,6 @@ export interface FileRouteTypes {
     | '/_auth/profile'
     | '/_auth/register'
     | '/(public)/'
-    | '/(public)/tasks/'
     | '/_auth/profile/'
   fileRoutesById: FileRoutesById
 }
@@ -179,34 +163,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileIndexRouteImport
       parentRoute: typeof AuthProfileRouteRoute
     }
-    '/(public)/tasks/': {
-      id: '/(public)/tasks/'
-      path: '/'
-      fullPath: '/tasks/'
-      preLoaderRoute: typeof publicTasksIndexRouteImport
-      parentRoute: typeof publicTasksRouteRoute
-    }
   }
 }
 
-interface publicTasksRouteRouteChildren {
-  publicTasksIndexRoute: typeof publicTasksIndexRoute
-}
-
-const publicTasksRouteRouteChildren: publicTasksRouteRouteChildren = {
-  publicTasksIndexRoute: publicTasksIndexRoute,
-}
-
-const publicTasksRouteRouteWithChildren =
-  publicTasksRouteRoute._addFileChildren(publicTasksRouteRouteChildren)
-
 interface publicRouteRouteChildren {
-  publicTasksRouteRoute: typeof publicTasksRouteRouteWithChildren
+  publicTasksRouteRoute: typeof publicTasksRouteRoute
   publicIndexRoute: typeof publicIndexRoute
 }
 
 const publicRouteRouteChildren: publicRouteRouteChildren = {
-  publicTasksRouteRoute: publicTasksRouteRouteWithChildren,
+  publicTasksRouteRoute: publicTasksRouteRoute,
   publicIndexRoute: publicIndexRoute,
 }
 

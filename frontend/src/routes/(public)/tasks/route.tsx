@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { Task } from '#/pages/Task'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(public)/tasks')({
   component: RouteComponent,
@@ -11,5 +12,5 @@ export const Route = createFileRoute('/(public)/tasks')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/tasks"!</div>
+  return <Task>{/* <Outlet /> */}</Task>
 }

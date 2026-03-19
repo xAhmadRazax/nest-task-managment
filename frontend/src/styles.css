@@ -145,4 +145,8 @@ body {
   html {
     @apply font-sans;
   }
+
+  .task {
+    anchor-name: --task;
+  }
 }

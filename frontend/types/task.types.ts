@@ -1,0 +1,6 @@
+export type TaskInputs = {
+  title: string
+  description: string
+  dueDate: Date | undefined
+  subTasks?: TaskInputs[]
+}

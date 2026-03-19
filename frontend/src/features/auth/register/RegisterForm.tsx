@@ -37,7 +37,7 @@ export const RegisterForm = () => {
       onSubmit={submitHandler}
       action=""
       method="post"
-      className="text-slate-200 mt-12 space-y-12"
+      className="mt-12 space-y-6"
     >
       <FieldWrapper>
         <FieldLabel htmlFor="name">Name</FieldLabel>
