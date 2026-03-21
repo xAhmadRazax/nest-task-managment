@@ -1,3 +1,4 @@
+import { cn } from '#/lib/utils'
 import React from 'react'
 
 export const Container = ({
@@ -8,7 +9,12 @@ export const Container = ({
   className?: string
 }) => {
   return (
-    <div className={`max-w-345  w-full h-full mx-auto ${classLists}`}>
+    <div
+      className={cn(
+        `max-w-[min(95%,1380px)]  w-full h-full mx-auto`,
+        classLists,
+      )}
+    >
       {children}
     </div>
   )

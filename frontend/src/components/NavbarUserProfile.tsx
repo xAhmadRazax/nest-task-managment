@@ -9,7 +9,7 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import type { User } from 'types/user.type'
+import type { User } from '#/types/user.type'
 import { useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLogout } from '#/features/auth/hooks/useLogout'

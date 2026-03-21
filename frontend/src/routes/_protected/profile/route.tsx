@@ -1,8 +1,7 @@
 import { Header } from '#/components/Header'
-
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(public)')({
+export const Route = createFileRoute('/_protected/profile')({
   component: RouteComponent,
 })
 

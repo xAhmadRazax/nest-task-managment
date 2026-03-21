@@ -3,7 +3,7 @@ import { Container } from '#/components/Container'
 import { CardWrapper } from '#/components/CardWrapper'
 import { Button } from '#/components/Button'
 
-export const Route = createFileRoute('/(public)/')({
+export const Route = createFileRoute('/_public/')({
   component: RouteComponent,
 })
 

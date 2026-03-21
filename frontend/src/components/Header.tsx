@@ -2,7 +2,7 @@ import { NavLinks } from './NavLinks'
 import { Link } from '@tanstack/react-router'
 import { Container } from './Container'
 import { NavbarUserProfile } from './NavbarUserProfile'
-import { Route } from '#/routes/(public)/route'
+import { Route } from '#/routes/__root'
 
 export const Header = () => {
   const { user } = Route.useRouteContext()

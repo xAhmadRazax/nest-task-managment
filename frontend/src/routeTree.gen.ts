@@ -9,36 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as publicRouteRouteImport } from './routes/(public)/route'
-import { Route as publicIndexRouteImport } from './routes/(public)/index'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as ProtectedProfileRouteRouteImport } from './routes/_protected/profile/route'
 import { Route as AuthRegisterRouteRouteImport } from './routes/_auth/register/route'
-import { Route as AuthProfileRouteRouteImport } from './routes/_auth/profile/route'
 import { Route as AuthLoginRouteRouteImport } from './routes/_auth/login/route'
-import { Route as publicTasksRouteRouteImport } from './routes/(public)/tasks/route'
-import { Route as AuthProfileIndexRouteImport } from './routes/_auth/profile/index'
+import { Route as ProtectedTasksIndexRouteImport } from './routes/_protected/tasks/index'
+import { Route as ProtectedProfileIndexRouteImport } from './routes/_protected/profile/index'
+import { Route as ProtectedTasksTaskIdIndexRouteImport } from './routes/_protected/tasks/$taskId/index'
 
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const publicRouteRoute = publicRouteRouteImport.update({
-  id: '/(public)',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const publicIndexRoute = publicIndexRouteImport.update({
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => publicRouteRoute,
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const ProtectedProfileRouteRoute = ProtectedProfileRouteRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const AuthRegisterRouteRoute = AuthRegisterRouteRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthProfileRouteRoute = AuthProfileRouteRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthLoginRouteRoute = AuthLoginRouteRouteImport.update({
@@ -46,67 +52,101 @@ const AuthLoginRouteRoute = AuthLoginRouteRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const publicTasksRouteRoute = publicTasksRouteRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => publicRouteRoute,
+const ProtectedTasksIndexRoute = ProtectedTasksIndexRouteImport.update({
+  id: '/tasks/',
+  path: '/tasks/',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
-const AuthProfileIndexRoute = AuthProfileIndexRouteImport.update({
+const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthProfileRouteRoute,
+  getParentRoute: () => ProtectedProfileRouteRoute,
 } as any)
+const ProtectedTasksTaskIdIndexRoute =
+  ProtectedTasksTaskIdIndexRouteImport.update({
+    id: '/tasks/$taskId/',
+    path: '/tasks/$taskId/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof publicIndexRoute
-  '/tasks': typeof publicTasksRouteRoute
+  '/': typeof PublicIndexRoute
   '/login': typeof AuthLoginRouteRoute
-  '/profile': typeof AuthProfileRouteRouteWithChildren
   '/register': typeof AuthRegisterRouteRoute
-  '/profile/': typeof AuthProfileIndexRoute
+  '/profile': typeof ProtectedProfileRouteRouteWithChildren
+  '/profile/': typeof ProtectedProfileIndexRoute
+  '/tasks/': typeof ProtectedTasksIndexRoute
+  '/tasks/$taskId/': typeof ProtectedTasksTaskIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof publicIndexRoute
-  '/tasks': typeof publicTasksRouteRoute
+  '/': typeof PublicIndexRoute
   '/login': typeof AuthLoginRouteRoute
   '/register': typeof AuthRegisterRouteRoute
-  '/profile': typeof AuthProfileIndexRoute
+  '/profile': typeof ProtectedProfileIndexRoute
+  '/tasks': typeof ProtectedTasksIndexRoute
+  '/tasks/$taskId': typeof ProtectedTasksTaskIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(public)': typeof publicRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/(public)/tasks': typeof publicTasksRouteRoute
+  '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/_public': typeof PublicRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRouteRoute
-  '/_auth/profile': typeof AuthProfileRouteRouteWithChildren
   '/_auth/register': typeof AuthRegisterRouteRoute
-  '/(public)/': typeof publicIndexRoute
-  '/_auth/profile/': typeof AuthProfileIndexRoute
+  '/_protected/profile': typeof ProtectedProfileRouteRouteWithChildren
+  '/_public/': typeof PublicIndexRoute
+  '/_protected/profile/': typeof ProtectedProfileIndexRoute
+  '/_protected/tasks/': typeof ProtectedTasksIndexRoute
+  '/_protected/tasks/$taskId/': typeof ProtectedTasksTaskIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tasks' | '/login' | '/profile' | '/register' | '/profile/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/profile'
+    | '/profile/'
+    | '/tasks/'
+    | '/tasks/$taskId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tasks' | '/login' | '/register' | '/profile'
+  to: '/' | '/login' | '/register' | '/profile' | '/tasks' | '/tasks/$taskId'
   id:
     | '__root__'
-    | '/(public)'
     | '/_auth'
-    | '/(public)/tasks'
+    | '/_protected'
+    | '/_public'
     | '/_auth/login'
-    | '/_auth/profile'
     | '/_auth/register'
-    | '/(public)/'
-    | '/_auth/profile/'
+    | '/_protected/profile'
+    | '/_public/'
+    | '/_protected/profile/'
+    | '/_protected/tasks/'
+    | '/_protected/tasks/$taskId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  publicRouteRoute: typeof publicRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -114,32 +154,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(public)': {
-      id: '/(public)'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof publicRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(public)/': {
-      id: '/(public)/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof publicIndexRouteImport
-      parentRoute: typeof publicRouteRoute
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_protected/profile': {
+      id: '/_protected/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProtectedProfileRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_auth/register': {
       id: '/_auth/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof AuthRegisterRouteRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/profile': {
-      id: '/_auth/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthProfileRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
     '/_auth/login': {
@@ -149,57 +182,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/(public)/tasks': {
-      id: '/(public)/tasks'
+    '/_protected/tasks/': {
+      id: '/_protected/tasks/'
       path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof publicTasksRouteRouteImport
-      parentRoute: typeof publicRouteRoute
+      fullPath: '/tasks/'
+      preLoaderRoute: typeof ProtectedTasksIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
-    '/_auth/profile/': {
-      id: '/_auth/profile/'
+    '/_protected/profile/': {
+      id: '/_protected/profile/'
       path: '/'
       fullPath: '/profile/'
-      preLoaderRoute: typeof AuthProfileIndexRouteImport
-      parentRoute: typeof AuthProfileRouteRoute
+      preLoaderRoute: typeof ProtectedProfileIndexRouteImport
+      parentRoute: typeof ProtectedProfileRouteRoute
+    }
+    '/_protected/tasks/$taskId/': {
+      id: '/_protected/tasks/$taskId/'
+      path: '/tasks/$taskId'
+      fullPath: '/tasks/$taskId/'
+      preLoaderRoute: typeof ProtectedTasksTaskIdIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
   }
 }
 
-interface publicRouteRouteChildren {
-  publicTasksRouteRoute: typeof publicTasksRouteRoute
-  publicIndexRoute: typeof publicIndexRoute
-}
-
-const publicRouteRouteChildren: publicRouteRouteChildren = {
-  publicTasksRouteRoute: publicTasksRouteRoute,
-  publicIndexRoute: publicIndexRoute,
-}
-
-const publicRouteRouteWithChildren = publicRouteRoute._addFileChildren(
-  publicRouteRouteChildren,
-)
-
-interface AuthProfileRouteRouteChildren {
-  AuthProfileIndexRoute: typeof AuthProfileIndexRoute
-}
-
-const AuthProfileRouteRouteChildren: AuthProfileRouteRouteChildren = {
-  AuthProfileIndexRoute: AuthProfileIndexRoute,
-}
-
-const AuthProfileRouteRouteWithChildren =
-  AuthProfileRouteRoute._addFileChildren(AuthProfileRouteRouteChildren)
-
 interface AuthRouteRouteChildren {
   AuthLoginRouteRoute: typeof AuthLoginRouteRoute
-  AuthProfileRouteRoute: typeof AuthProfileRouteRouteWithChildren
   AuthRegisterRouteRoute: typeof AuthRegisterRouteRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthLoginRouteRoute: AuthLoginRouteRoute,
-  AuthProfileRouteRoute: AuthProfileRouteRouteWithChildren,
   AuthRegisterRouteRoute: AuthRegisterRouteRoute,
 }
 
@@ -207,9 +220,51 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface ProtectedProfileRouteRouteChildren {
+  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
+}
+
+const ProtectedProfileRouteRouteChildren: ProtectedProfileRouteRouteChildren = {
+  ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
+}
+
+const ProtectedProfileRouteRouteWithChildren =
+  ProtectedProfileRouteRoute._addFileChildren(
+    ProtectedProfileRouteRouteChildren,
+  )
+
+interface ProtectedRouteRouteChildren {
+  ProtectedProfileRouteRoute: typeof ProtectedProfileRouteRouteWithChildren
+  ProtectedTasksIndexRoute: typeof ProtectedTasksIndexRoute
+  ProtectedTasksTaskIdIndexRoute: typeof ProtectedTasksTaskIdIndexRoute
+}
+
+const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedProfileRouteRoute: ProtectedProfileRouteRouteWithChildren,
+  ProtectedTasksIndexRoute: ProtectedTasksIndexRoute,
+  ProtectedTasksTaskIdIndexRoute: ProtectedTasksTaskIdIndexRoute,
+}
+
+const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
+  ProtectedRouteRouteChildren,
+)
+
+interface PublicRouteRouteChildren {
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  publicRouteRoute: publicRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

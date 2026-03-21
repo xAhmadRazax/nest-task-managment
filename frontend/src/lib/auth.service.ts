@@ -1,6 +1,6 @@
 import { axios } from '#/ultis/axios'
-import type { LoginPropType, RegisterPropType } from 'types/auth.types'
-import type { User } from 'types/user.type'
+import type { LoginPropType, RegisterPropType } from '#/types/auth.types'
+import type { User } from '#/types/user.type'
 
 export async function registerApi({
   name,

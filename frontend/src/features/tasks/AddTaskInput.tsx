@@ -12,16 +12,16 @@ import type {
   UseFormClearErrors,
   FieldNamesMarkedBoolean,
 } from 'react-hook-form'
-import type { TaskInputs } from 'types/task.types'
+import type { CreateTaskDto } from '#/types/task.types'
 
 interface PropType {
-  register: UseFormRegister<TaskInputs>
-  control: Control<TaskInputs>
-  errors: FieldErrors<TaskInputs>
+  register: UseFormRegister<CreateTaskDto>
+  control: Control<CreateTaskDto>
+  errors: FieldErrors<CreateTaskDto>
   index?: number
   dueDate?: Date
-  clearErrors?: UseFormClearErrors<TaskInputs>
-  touchedFields?: FieldNamesMarkedBoolean<TaskInputs>
+  clearErrors?: UseFormClearErrors<CreateTaskDto>
+  touchedFields?: FieldNamesMarkedBoolean<CreateTaskDto>
 }
 
 export const AddTaskInput = ({
@@ -40,7 +40,7 @@ export const AddTaskInput = ({
       <FieldWrapper>
         <FieldLabel htmlFor={`${prefix}title`}>Title*</FieldLabel>
         <InputField
-          {...register(`${prefix}title` as Path<TaskInputs>, {
+          {...register(`${prefix}title` as Path<CreateTaskDto>, {
             required: true,
             minLength: {
               value: 3,
@@ -58,14 +58,14 @@ export const AddTaskInput = ({
       <FieldWrapper>
         <FieldLabel htmlFor={`${prefix}description`}>Description</FieldLabel>
         <InputTextarea
-          {...register(`${prefix}description` as Path<TaskInputs>)}
+          {...register(`${prefix}description` as Path<CreateTaskDto>)}
         />
       </FieldWrapper>
       {/* timeDuration */}
       <FieldWrapper>
         <FieldLabel htmlFor={`${prefix}dueDate`}>Due Date*</FieldLabel>
         <Controller
-          name={`${prefix}dueDate` as Path<TaskInputs>}
+          name={`${prefix}dueDate` as Path<CreateTaskDto>}
           rules={{ required: 'Due date is required' }}
           control={control}
           render={({ field }) => (

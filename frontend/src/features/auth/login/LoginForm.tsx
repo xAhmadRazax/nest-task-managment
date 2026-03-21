@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useRef } from 'react'
 import { useLogin } from '../hooks/useLogin'
-import type { User } from 'types/user.type'
+import type { User } from '#/types/user.type'
 import { useQueryClient } from '@tanstack/react-query'
 import { meQueryOptions } from '#/queries/auth.query'
 import { Route } from '#/routes/_auth/login/route'

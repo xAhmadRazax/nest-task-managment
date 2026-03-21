@@ -1,6 +1,6 @@
 import { getMeApi, loginApi, logoutApi, registerApi } from '#/lib/auth.service'
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
-import type { LoginPropType, RegisterPropType } from 'types/auth.types'
+import type { LoginPropType, RegisterPropType } from '#/types/auth.types'
 
 export const meQueryOptions = queryOptions({
   queryKey: ['auth', 'me'],

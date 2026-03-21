@@ -1,23 +1,16 @@
 import { CardWrapper } from '#/components/CardWrapper'
 import { Container } from '#/components/Container'
 
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
-
-import React, { useRef, useState } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 import { Button } from '#/components/Button'
 import { AddTaskInput } from './AddTaskInput'
-import type { TaskInputs } from 'types/task.types'
+import type { CreateTaskDto } from '#/types/task.types'
 import { useAddTask } from './hooks/useAddTask'
-
-// interface SubTasks extends TaskInputs {
-//   id: UUID
-// }
-// interface TaskInput extends TaskInputs {
-//   subTasks?: SubTasks[]
-// }
+import { useNavigate } from '@tanstack/react-router'
 
 export const AddTaskForm = () => {
+  const navigate = useNavigate()
   const { addTaskHandler } = useAddTask()
   const {
     register,
@@ -28,7 +21,7 @@ export const AddTaskForm = () => {
     handleSubmit,
     clearErrors,
     formState: { errors, touchedFields },
-  } = useForm<TaskInputs>({ mode: 'onBlur' })
+  } = useForm<CreateTaskDto>({ mode: 'onBlur' })
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -53,8 +46,12 @@ export const AddTaskForm = () => {
     remove(index)
   }
 
-  function onSubmitHandler(data: TaskInputs) {
-    addTaskHandler(data)
+  function onSubmitHandler(data: CreateTaskDto) {
+    addTaskHandler(data, {
+      onSuccess: () => {
+        navigate({ to: '/tasks', replace: true })
+      },
+    })
   }
 
   return (
