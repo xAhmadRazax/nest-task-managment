@@ -32,6 +32,11 @@ export class TasksService {
       },
       take: 1,
       relations: ['subTasks', 'subTasks.user', 'user'],
+      order: {
+        subTasks: {
+          createdAt: 'ASC',
+        },
+      },
     });
 
     if (!task) {
