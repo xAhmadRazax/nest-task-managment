@@ -44,6 +44,6 @@ export class Task {
   })
   parent: Task;
 
-  @OneToMany(() => Task, (task) => task.parent)
+  @OneToMany(() => Task, (task) => task.parent, { cascade: true })
   subTasks: Task[];
 }

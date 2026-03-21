@@ -120,6 +120,7 @@ export class TasksService {
 
     const taskWithUpdatedState = this.stateTransition(task, status);
 
+    console.log(taskWithUpdatedState);
     return this.taskRepo.save(taskWithUpdatedState);
   }
 
@@ -153,10 +154,9 @@ export class TasksService {
 
   private stateTransition(task: Task, newStatus: TaskStatus) {
     if (
-      newStatus === TaskStatus.DONE ||
-      (newStatus === TaskStatus.ABANDONED &&
-        task.subTasks.length > 0 &&
-        this.validTransition(task.status, newStatus))
+      (newStatus === TaskStatus.DONE || newStatus === TaskStatus.ABANDONED) &&
+      task.subTasks.length > 0 &&
+      this.validTransition(task.status, newStatus)
     ) {
       task.subTasks.map((subtask) => {
         // if subTask state is not equal Done change
@@ -182,6 +182,20 @@ export class TasksService {
         ) {
           subtask.status = TaskStatus.FAILED;
         }
+        // else change it to ABOUNDED
+        return subtask;
+      });
+    } else if (
+      (task.status === TaskStatus.ABANDONED ||
+        newStatus === TaskStatus.ABANDONED) &&
+      (newStatus === TaskStatus.OPEN || newStatus === TaskStatus.IN_PROGRESS) &&
+      task.subTasks.length > 0 &&
+      this.validTransition(task.status, newStatus)
+    ) {
+      task.subTasks.map((subtask) => {
+        // if subTask state is not equal Done change
+
+        subtask.status = newStatus;
         // else change it to ABOUNDED
         return subtask;
       });
