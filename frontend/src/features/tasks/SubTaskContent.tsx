@@ -9,6 +9,7 @@ import type { TasksType } from '#/types/task.types'
 import { getRemainingDuration } from '#/ultis/date-fns'
 import React from 'react'
 import { TaskStatusTransition } from './TaskStatusTransition'
+import { DeleteTaskButton } from './DeleteTaskButton'
 
 export const SubTaskContent = ({
   tasks,
@@ -42,11 +43,14 @@ export const SubTaskContent = ({
               </p>
             )}
 
-            <TaskStatusTransition
-              id={task.id}
-              status={task.status}
-              disabled={disableStatusUpdates}
-            />
+            <div className="flex justify-between">
+              <TaskStatusTransition
+                id={task.id}
+                status={task.status}
+                disabled={disableStatusUpdates}
+              />
+              <DeleteTaskButton navigateAway={false} id={task.id} />
+            </div>
           </AccordionContent>
         </AccordionItem>
       ))}

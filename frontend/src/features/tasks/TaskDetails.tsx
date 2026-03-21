@@ -8,6 +8,8 @@ import { SubTaskContent } from './SubTaskContent'
 import { TaskStatusTransition } from './TaskStatusTransition'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '#/components/Button'
+import { DeleteTask } from './DeleteTask'
+import { DeleteTaskButton } from './DeleteTaskButton'
 
 export const TaskDetails = ({
   id,
@@ -67,12 +69,7 @@ export const TaskDetails = ({
           {/* Button Containers */}
 
           <div className="mt-8 flex justify-between">
-            <Button
-              type="button"
-              className="bg-red-500/60 w-fit hover:bg-red-500/50"
-            >
-              Delete
-            </Button>
+            <DeleteTaskButton id={id} />
             <Button
               type="button"
               className="bg-primary/60 w-fit hover:bg-primary/50"

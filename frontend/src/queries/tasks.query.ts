@@ -3,6 +3,7 @@ import {
   getTaskApi,
   getTasksApi,
   updateTaskStatusApi,
+  deleteTaskApi,
 } from '#/lib/task.service'
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 import type { QueryClient } from '@tanstack/react-query'
@@ -41,6 +42,15 @@ export const updateTaskStatusMutationOptions = (id: string) =>
       taskId: string
       status: TaskStatus
     }): Promise<TasksType> => updateTaskStatusApi({ id: taskId, status }),
+    onError: (err) => {},
+    onSuccess: () => {},
+  })
+
+export const deleteTaskMutationOptions = (id: string) =>
+  mutationOptions({
+    mutationKey: ['tasks', id],
+    mutationFn: ({ taskId }: { taskId: string }): Promise<void> =>
+      deleteTaskApi({ id: taskId }),
     onError: (err) => {},
     onSuccess: () => {},
   })

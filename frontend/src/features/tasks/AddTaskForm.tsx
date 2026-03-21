@@ -8,8 +8,13 @@ import { AddTaskInput } from './AddTaskInput'
 import type { CreateTaskDto } from '#/types/task.types'
 import { useAddTask } from './hooks/useAddTask'
 import { useNavigate } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { useContext } from 'react'
+import { ModalContext } from '#/components/Modal'
 
 export const AddTaskForm = () => {
+  const queryClient = useQueryClient()
+  const { close } = useContext(ModalContext)
   const navigate = useNavigate()
   const { addTaskHandler } = useAddTask()
   const {
@@ -49,6 +54,8 @@ export const AddTaskForm = () => {
   function onSubmitHandler(data: CreateTaskDto) {
     addTaskHandler(data, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['tasks'] })
+        close()
         navigate({ to: '/tasks', replace: true })
       },
     })

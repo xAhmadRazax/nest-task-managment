@@ -20,7 +20,7 @@ interface ModalContextType {
   openWindowName: string
 }
 
-const ModalContext = createContext<ModalContextType>({
+export const ModalContext = createContext<ModalContextType>({
   opens: () => {},
   openWindowName: '',
   close: () => {},
@@ -86,11 +86,11 @@ const Window = ({
     <div className="fixed top-0 left-0 w-full h-svh z-50 backdrop-blur-md bg-primary/5 transition-all">
       <div
         ref={ref}
-        className="fixed top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 rounded-2xl w-165"
+        className="fixed top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 rounded-2xl max-w-[min(95%,550px)] w-full"
       >
         <div className="relative">
           <Button
-            className={'absolute right-20 top-3 z-40 bg-red-700/80'}
+            className={'absolute right-12 top-3 z-40 bg-red-700/80'}
             onClick={close}
           >
             <X />

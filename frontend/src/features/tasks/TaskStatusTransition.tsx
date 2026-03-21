@@ -51,7 +51,12 @@ export const TaskStatusTransition = ({
         )
       }}
     >
-      <SelectTrigger className={cn(`w-45 h-50 border-primary/80`)}>
+      <SelectTrigger
+        className={cn(
+          `w-45 h-50 border-primary/80`,
+          TASK_STATUS_CONFIG[status].class,
+        )}
+      >
         <SelectValue
           className="text-primary-foreground/50 "
           placeholder={TASK_STATUS_CONFIG[status].label}

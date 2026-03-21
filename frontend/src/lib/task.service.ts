@@ -73,3 +73,15 @@ export async function updateTaskStatusApi({
     throw error // ← rethrow so caller knows it failed}
   }
 }
+
+export async function deleteTaskApi({ id }: { id: string }): Promise<void> {
+  try {
+    await axios.delete(`tasks/${id}`)
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log('backend error:', error.response?.data) // ← actual error
+      console.log('status:', error.response?.status)
+    }
+    throw error // ← rethrow so caller knows it failed}
+  }
+}

@@ -5,38 +5,30 @@ export const TASK_STATUS_CONFIG: Record<
   {
     label: string
     class: string
-    dot: string
-    border: string
   }
 > = {
   OPEN: {
     label: 'Open',
-    class: 'bg-slate-500/20   text-slate-400',
-    dot: 'bg-slate-400',
-    border: 'border-l-slate-500',
+    class: 'bg-primary/15 text-primary border border-primary/30',
   },
+
   IN_PROGRESS: {
     label: 'In Progress',
-    class: 'bg-blue-500/20    text-blue-400',
-    dot: 'bg-blue-400',
-    border: 'border-l-blue-500',
+    class: 'bg-primary/15 text-primary border border-primary/30',
   },
+
   DONE: {
     label: 'Done',
-    class: 'bg-emerald-500/20 text-emerald-400',
-    dot: 'bg-emerald-400',
-    border: 'border-l-emerald-500',
+    class: 'bg-primary-/15 text-primary-foreground/80 border border-primary',
   },
+
   FAILED: {
     label: 'Failed',
-    class: 'bg-red-500/20     text-red-400',
-    dot: 'bg-red-400',
-    border: 'border-l-red-500',
+    class: 'bg-red-500/15 text-red-400 border border-red-500/30',
   },
+
   ABANDONED: {
     label: 'Abandoned',
-    class: 'bg-zinc-500/20    text-zinc-400',
-    dot: 'bg-zinc-400',
-    border: 'border-l-zinc-500',
+    class: 'bg-zinc-500/15 text-zinc-400 border border-zinc-500/30',
   },
 }
