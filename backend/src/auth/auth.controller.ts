@@ -92,7 +92,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @GetAccessToken() token: string,
   ) {
-    console.log(token);
     await this.blacklistTokenService.blacklistToken(token);
     return res.clearCookie('token', COOKIE_OPTIONS);
   }

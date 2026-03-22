@@ -32,7 +32,6 @@ export class AuthGuard implements CanActivate {
       // is the key that was passsed in the JwtModule
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       const user = await this.userService.findOne(payload.email);
-      console.log(user, payload);
 
       if (!user) {
         await this.blackListTokenService.blacklistToken(token);
@@ -63,7 +62,6 @@ export class AuthGuard implements CanActivate {
       (request?.cookies['token'] as string) ||
       request.headers.authorization?.split(' ')[1];
 
-    console.log(token);
     return token ?? undefined;
   }
 }

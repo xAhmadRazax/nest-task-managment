@@ -32,8 +32,8 @@ export class UpdateTaskDto {
 
 export class UpdateSubtaskDto {
   @IsNumber()
-  @IsNotEmpty()
-  id: number;
+  @IsOptional()
+  id?: number;
 
   @IsOptional()
   @IsString()

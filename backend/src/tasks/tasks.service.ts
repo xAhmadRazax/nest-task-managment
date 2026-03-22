@@ -77,6 +77,7 @@ export class TasksService {
 
     if (updateTaskDto.subTasks) {
       this.removeUndefinedFields(updateTaskDto.subTasks);
+      // creating map so that we have so we have key:value pair of id:tasks
       const subTaskUpdates = new Map(
         updateTaskDto.subTasks.map((t) => [t.id, t]),
       );
@@ -84,6 +85,7 @@ export class TasksService {
       const subTaskToUpdates = task.subTasks.reduce((accArr, subTask) => {
         const taskUpdates = subTaskUpdates.get(+subTask.id);
 
+        console.log('where am i');
         if (taskUpdates) {
           Object.assign(subTask, taskUpdates);
 
@@ -94,8 +96,16 @@ export class TasksService {
 
       if (subTaskToUpdates.length > 0) {
         await this.taskRepo.save(subTaskToUpdates);
+      } else {
+        const newSubQueries = await this.addSubTasks(
+          userId,
+          task.id,
+          updateTaskDto.subTasks as CreateSubtaskDto[],
+        );
+
+        task.subTasks = [...task.subTasks, ...newSubQueries];
+        delete updateTaskDto.subTasks;
       }
-      delete updateTaskDto.subTasks;
     }
     if (Object.keys(updateTaskDto).length > 0) {
       Object.assign(task, updateTaskDto);
@@ -217,12 +227,17 @@ export class TasksService {
     parentTask: Task,
   ) {
     return tasks.map((subTask: Task): DeepPartial<Task> => {
-      const taskEntity = this.taskRepo.create(subTask);
-      return {
-        ...taskEntity,
+      const taskEntity = this.taskRepo.create({
+        ...subTask,
         user: { id: userId },
-        parent: parentTask,
-      };
+        parent: { id: parentTask.id },
+      });
+      // return {
+      //   ...taskEntity,
+      //   user: { id: userId },
+      //   parent: parentTask,
+      // };
+      return taskEntity;
     });
   }
 

@@ -7,7 +7,6 @@ export const GetUserId = createParamDecorator(
     const req = ctx.switchToHttp().getRequest<Request>();
     const user = req?.user as JwtPayload;
 
-    console.log(user.id);
     return user.id;
   },
 );
