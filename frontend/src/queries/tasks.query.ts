@@ -20,7 +20,7 @@ export const addTaskMutationOption = mutationOptions({
 
 export const updateTaskMutationOption = (id: string) =>
   mutationOptions({
-    mutationKey: ['tasks', id],
+    mutationKey: ['task', id],
     mutationFn: ({ title, description, dueDate, subTasks }: CreateTaskDto) =>
       updateTaskApi(id, { title, description, dueDate, subTasks }),
     onError: (err) => {},
@@ -30,21 +30,17 @@ export const updateTaskMutationOption = (id: string) =>
 export const tasksQueryOptions = queryOptions({
   queryKey: ['tasks'],
   queryFn: getTasksApi,
-  retry: false, // Don't retry 401s — user is just not logged in
-  staleTime: Infinity, // Session doesn't go stale; invalidate manually on logout
 })
 
 export const taskQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ['tasks', id],
+    queryKey: ['task', id],
     queryFn: () => getTaskApi(id),
-    retry: false, // Don't retry 401s — user is just not logged in
-    staleTime: Infinity, // Session doesn't go stale; invalidate manually on logout
   })
 
 export const updateTaskStatusMutationOptions = (id: string) =>
   mutationOptions({
-    mutationKey: ['tasks', id],
+    mutationKey: ['task', id],
     mutationFn: ({
       taskId,
       status,
@@ -58,7 +54,7 @@ export const updateTaskStatusMutationOptions = (id: string) =>
 
 export const deleteTaskMutationOptions = (id: string) =>
   mutationOptions({
-    mutationKey: ['tasks', id],
+    mutationKey: ['task', id],
     mutationFn: ({ taskId }: { taskId: string }): Promise<void> =>
       deleteTaskApi({ id: taskId }),
     onError: (err) => {},

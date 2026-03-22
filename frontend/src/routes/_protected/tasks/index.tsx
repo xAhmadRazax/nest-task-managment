@@ -1,6 +1,8 @@
+import { TasksLoaderSuspense } from '#/features/tasks/TasksLoaderSuspense'
 import { TaskPage } from '#/pages/Tasks'
 import { tasksQueryOptions } from '#/queries/tasks.query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { Suspense } from 'react'
 
 export const Route = createFileRoute('/_protected/tasks/')({
   component: RouteComponent,
@@ -10,5 +12,9 @@ export const Route = createFileRoute('/_protected/tasks/')({
 })
 
 function RouteComponent() {
-  return <TaskPage />
+  return (
+    <Suspense fallback={<TasksLoaderSuspense />}>
+      <TaskPage />
+    </Suspense>
+  )
 }

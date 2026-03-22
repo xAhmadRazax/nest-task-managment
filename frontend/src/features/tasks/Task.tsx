@@ -1,5 +1,4 @@
 import { CardWrapper } from '#/components/CardWrapper'
-import { Container } from '#/components/Container'
 import { TaskStatus } from '#/types/task.types'
 import type { TasksType } from '#/types/task.types'
 import { getRemainingDuration } from '#/ultis/date-fns'
@@ -14,7 +13,7 @@ export const Task = ({
   task: { description, id, title, status, dueDate, subTasks },
 }: TypeProps) => {
   return (
-    <CardWrapper className="px-5 py-5">
+    <CardWrapper className={'px-5 py-5'}>
       <Link
         to="/tasks/$taskId"
         params={{ taskId: id }}

@@ -70,7 +70,7 @@ export const TaskDetails = ({
           {/* Button Containers */}
 
           <div className="mt-8 flex justify-between">
-            <DeleteTaskButton id={id} />
+            <DeleteTaskButton id={id} navigateAway={true} />
             {/* <Button
               type="button"
               className="bg-primary/60 w-fit hover:bg-primary/50"

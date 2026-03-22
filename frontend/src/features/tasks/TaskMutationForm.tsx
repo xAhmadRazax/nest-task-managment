@@ -11,13 +11,15 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { ModalContext } from '#/components/Modal'
 import { useTaskMutation } from './hooks/useUpdateTask'
-import { id } from 'date-fns/locale'
+import { toast } from 'sonner'
+import { Spinner } from '#/components/ui/spinner'
+import { isAxiosError } from 'axios'
 
 export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
   const queryClient = useQueryClient()
   const { close } = useContext(ModalContext)
   const navigate = useNavigate()
-  const { taskMutationHandler } = useTaskMutation(task && task.id)
+  const { taskMutationHandler, isLoading } = useTaskMutation(task && task.id)
 
   const {
     register,
@@ -64,23 +66,38 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
 
   function onSubmitHandler(data: CreateTaskDto) {
     if (!task) {
-      console.log('calling creation')
+      toast.info('Task Creation Process is in action, please wait')
       taskMutationHandler(data, {
         onSuccess: () => {
+          toast.info('Task has been added successfully')
           reset()
           queryClient.invalidateQueries({ queryKey: ['tasks'] })
           close()
           navigate({ to: '/tasks', replace: true })
         },
+        onError: (err) => {
+          toast.error(
+            err.message ||
+              'Something went wrong while creating Task, please try later',
+          )
+        },
       })
     } else {
-      console.log('calling updation')
+      toast.info('Task Updating Process is in action, please wait')
       taskMutationHandler(data, {
-        onSuccess: () => {
-          reset()
+        onSuccess: (updatedTask) => {
+          toast.success('Task has been updated successfully')
+          queryClient.setQueryData(['task', task.id.toString()], updatedTask)
           queryClient.invalidateQueries({ queryKey: ['tasks'] })
+          reset()
           close()
           navigate({ to: '/tasks', replace: true })
+        },
+        onError: (err) => {
+          const message = isAxiosError(err)
+            ? err.response?.data?.message
+            : 'Something went wrong, please try later'
+          toast.error(message)
         },
       })
     }
@@ -121,10 +138,12 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
                     touchedFields={touchedFields}
                   />
                   <Button
+                    disabled={isLoading}
                     onClick={() => onRemoveSubTaskHandler(i)}
                     type="button"
                     className="bg-red-800 hover:bg-red-800/80 ring-red-900 w-5/6 w-auto ml-auto"
                   >
+                    {isLoading && <span>{<Spinner />}</span>}
                     Delete Subtask
                   </Button>
                 </div>
@@ -132,15 +151,25 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
             </div>
             <div className="btn-container space-y-6 ">
               <Button
+                disabled={isLoading}
                 type="button"
+                isSubmitButton={false}
                 onClick={onAddSubTaskHandler}
                 className="ml-auto block w-auto"
               >
+                {isLoading && <span>{<Spinner />}</span>}
                 Add subTask
               </Button>
 
-              <Button type="button" isSubmitButton>
-                {task && task.id ? 'Update Task' : 'Add Task'}
+              <Button disabled={isLoading} type="button" isSubmitButton>
+                {isLoading && <span>{<Spinner />}</span>}
+                {task && task.id
+                  ? isLoading
+                    ? 'Updating Task...'
+                    : 'Update Task'
+                  : isLoading
+                    ? 'Creating Task...'
+                    : 'Add Task'}
               </Button>
             </div>
           </form>

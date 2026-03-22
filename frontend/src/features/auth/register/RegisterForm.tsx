@@ -5,10 +5,13 @@ import { FieldWrapper } from '#/components/InputWrapper'
 import { FieldLabel } from '#/components/ui/field'
 import { InputField } from '#/components/InputField'
 import { Button } from '#/components/Button'
+import { toast } from 'sonner'
+import { Spinner } from '#/components/ui/spinner'
+import { isAxiosError } from 'axios'
 
 export const RegisterForm = () => {
   const navigate = useNavigate()
-  const { registerHandler, isLoading, error } = useRegister()
+  const { registerHandler, isLoading } = useRegister()
   const nameRef = useRef<HTMLInputElement | null>(null)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
@@ -26,7 +29,14 @@ export const RegisterForm = () => {
       { name, email, password },
       {
         onSuccess: () => {
+          toast.success('User Register successfully')
           navigate({ to: '/login', replace: true })
+        },
+        onError: (err) => {
+          const message = isAxiosError(err)
+            ? err.response?.data?.message
+            : 'Something went wrong, please try later'
+          toast.error(message)
         },
       },
     )
@@ -60,7 +70,10 @@ export const RegisterForm = () => {
       </FieldWrapper>
 
       <div className="button-container flex w-full ">
-        <Button type="button">Register</Button>
+        <Button disabled={isLoading} type="button">
+          {isLoading && <Spinner />}
+          {isLoading ? 'Registering...' : 'Register'}
+        </Button>
       </div>
     </form>
   )

@@ -11,6 +11,7 @@ export interface ButtonProps {
   type?: 'button' | 'link'
   onClick?: () => void
   noContent?: boolean
+  disabled?: boolean
 }
 
 export const Button = ({
@@ -21,11 +22,13 @@ export const Button = ({
   noContent = false,
   className,
   onClick,
+  disabled = false,
 }: ButtonProps) => {
   return (
     <>
       {noContent === true && (
         <ShadCnButton
+          disabled={disabled}
           onClick={() => onClick?.()}
           type={isSubmitButton ? 'submit' : 'button'}
           className={cn(

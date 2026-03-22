@@ -1,7 +1,11 @@
 import { tasksQueryOptions } from '#/queries/tasks.query'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export function useTasks() {
-  const { data, error, isPending: isLoading } = useQuery(tasksQueryOptions)
+  const {
+    data,
+    error,
+    isPending: isLoading,
+  } = useSuspenseQuery(tasksQueryOptions)
   return { data, error, isLoading }
 }

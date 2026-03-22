@@ -1,6 +1,6 @@
 import { taskQueryOptions } from '#/queries/tasks.query'
 import { Route } from '#/routes/_protected/tasks/$taskId'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export function useTask() {
   const { taskId } = Route.useParams()
@@ -8,6 +8,6 @@ export function useTask() {
     data,
     error,
     isPending: isLoading,
-  } = useQuery(taskQueryOptions(taskId))
+  } = useSuspenseQuery(taskQueryOptions(taskId))
   return { data, error, isLoading }
 }

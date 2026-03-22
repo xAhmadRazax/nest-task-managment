@@ -1,7 +1,4 @@
-import { Button } from '#/components/Button'
-import { CardWrapper } from '#/components/CardWrapper'
 import { Container } from '#/components/Container'
-import { AddTask } from '#/features/tasks/AddTask'
 import { useTasks } from '#/features/tasks/hooks/useTasks'
 import { Task } from '#/features/tasks/Task'
 import { TaskMutationButton } from '#/features/tasks/TaskMutationButton'
@@ -20,7 +17,9 @@ export const TaskPage = () => {
 
         <div className=" mt-6 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8">
           {/* <Tasks /> <Tasks /> <Tasks /> <Tasks /> */}
-          {tasks && tasks.map((task) => <Task task={task} key={task.id} />)}
+
+          {tasks.length > 0 &&
+            tasks.map((task) => <Task task={task} key={task.id} />)}
         </div>
       </Container>
     </section>

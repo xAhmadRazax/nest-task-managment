@@ -10,6 +10,7 @@ import { getRemainingDuration } from '#/ultis/date-fns'
 import React from 'react'
 import { TaskStatusTransition } from './TaskStatusTransition'
 import { DeleteTaskButton } from './DeleteTaskButton'
+import { cn } from '#/lib/utils'
 
 export const SubTaskContent = ({
   tasks,
@@ -27,9 +28,14 @@ export const SubTaskContent = ({
         <AccordionItem
           key={task.id}
           value={task.id}
-          className="pb-3 border-b border-primary/20"
+          className={cn(
+            'pb-3 border-b border-primary/20',
+            task.status === TaskStatus.DONE && 'text-primary line-through',
+            task.status === TaskStatus.ABANDONED &&
+              'text-yellow-400 line-through',
+          )}
         >
-          <AccordionTrigger className="py-1 text-base font-medium">
+          <AccordionTrigger className={'py-1 text-base font-medium '}>
             {task.title}
           </AccordionTrigger>
 
@@ -43,7 +49,7 @@ export const SubTaskContent = ({
               </p>
             )}
 
-            <div className="flex justify-between">
+            <div className="flex justify-between line-clamp-none">
               <TaskStatusTransition
                 id={task.id}
                 status={task.status}

@@ -9,12 +9,15 @@ import { FieldLabel } from '@/components/ui/field'
 import { FieldWrapper } from '#/components/InputWrapper'
 import { InputField } from '#/components/InputField'
 import { Button } from '#/components/Button'
+import { toast } from 'sonner'
+import { Spinner } from '#/components/ui/spinner'
+import { isAxiosError } from 'axios'
 
 export const LoginForm = () => {
   const queryClient = useQueryClient()
   const { redirect: redirectTo } = Route.useSearch()
   const navigate = useNavigate()
-  const { loginHandler } = useLogin()
+  const { loginHandler, isLoading } = useLogin()
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
   const submitHandler = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -30,8 +33,15 @@ export const LoginForm = () => {
       { email, password },
       {
         onSuccess: (user) => {
+          toast.success('user Login successfully')
           queryClient.setQueryData(meQueryOptions.queryKey, user.user)
           navigate({ to: redirectTo || '/', replace: true })
+        },
+        onError: (err) => {
+          const message = isAxiosError(err)
+            ? err.response?.data?.message
+            : 'Something went wrong, please try later'
+          toast.error(message)
         },
       },
     )
@@ -60,7 +70,10 @@ export const LoginForm = () => {
       </FieldWrapper>
 
       <div className="button-container flex ">
-        <Button type="button">Login</Button>
+        <Button disabled={isLoading} type="button">
+          {isLoading && <Spinner />}
+          {isLoading ? 'Logging In...' : 'Login '}
+        </Button>
       </div>
     </form>
   )

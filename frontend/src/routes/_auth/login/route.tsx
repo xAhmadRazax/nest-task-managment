@@ -1,6 +1,7 @@
 import { Login } from '#/pages/Login'
 import { meQueryOptions } from '#/queries/auth.query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { Suspense } from 'react'
 import z from 'zod'
 
 // Validate the `redirect` search param from URL

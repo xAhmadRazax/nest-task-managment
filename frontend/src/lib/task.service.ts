@@ -33,15 +33,16 @@ export async function updateTaskApi(
   { title, description, dueDate, subTasks }: CreateTaskDto,
 ) {
   try {
-    console.log('update Api')
     const { data } = await axios.patch(`tasks/${id}`, {
       title,
       description,
       dueDate,
       subTasks,
     })
+    console.log(data)
     return data
   } catch (error) {
+    console.log(error)
     if (isAxiosError(error)) {
       console.log('backend error:', error.response?.data) // ← actual error
       console.log('status:', error.response?.status)
