@@ -14,8 +14,9 @@ export class CreateTaskDto {
   title: string;
 
   @IsString()
+  @IsOptional()
   @IsNotEmpty()
-  description: string;
+  description?: string;
 
   @Type(() => Date)
   @IsDate()
