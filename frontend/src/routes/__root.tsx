@@ -1,11 +1,17 @@
 import { Toaster } from '@/components/ui/sonner'
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  Link,
+  Outlet,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 
 import '../styles.css'
 import { meQueryOptions } from '#/queries/auth.query'
+import { NotFoundComponent } from '#/components/NotFoundComponent'
+import { ErrorComponent } from '#/components/ErrorComponent'
 
 export interface RouterContext {
   queryClient: QueryClient
@@ -24,6 +30,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       // Redirect to login, preserving the intended destination
     }
   },
+  notFoundComponent: NotFoundComponent,
+  errorComponent: ErrorComponent,
 })
 
 function RootComponent() {
