@@ -72,6 +72,7 @@ export const TaskStatusTransition = ({
           {statusValidTransition[status].length > 0 &&
             statusValidTransition[status].map((taskStatus) => (
               <SelectItem
+                key={TASK_STATUS_CONFIG[taskStatus].label}
                 className="px-2 py-2 cursor-pointer "
                 value={TASK_STATUS_CONFIG[taskStatus].label}
               >

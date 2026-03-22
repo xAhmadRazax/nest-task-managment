@@ -24,7 +24,7 @@ interface PropType {
   touchedFields?: FieldNamesMarkedBoolean<CreateTaskDto>
 }
 
-export const AddTaskInput = ({
+export const TaskInput = ({
   register,
   control,
   errors,

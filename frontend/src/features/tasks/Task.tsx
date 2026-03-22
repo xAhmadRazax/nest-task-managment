@@ -4,6 +4,7 @@ import { TaskStatus } from '#/types/task.types'
 import type { TasksType } from '#/types/task.types'
 import { getRemainingDuration } from '#/ultis/date-fns'
 import { Link } from '@tanstack/react-router'
+import { TaskStatusTransition } from './TaskStatusTransition'
 
 interface TypeProps {
   task: TasksType
@@ -21,8 +22,8 @@ export const Task = ({
       >
         {/* Header */}
         <div className="flex flex-col space-y-3">
-          <div className="ml-auto w-fit rounded-full px-4 py-1 text-xs bg-gray-700/50 text-gray-300/80">
-            {status}
+          <div className="ml-auto w-fit ">
+            <TaskStatusTransition id={id} status={status} />
           </div>
 
           <h3 className="text-xl font-semibold leading-tight">{title}</h3>

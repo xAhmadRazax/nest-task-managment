@@ -1,5 +1,6 @@
 import {
   addTaskApi,
+  updateTaskApi,
   getTaskApi,
   getTasksApi,
   updateTaskStatusApi,
@@ -10,12 +11,21 @@ import type { QueryClient } from '@tanstack/react-query'
 import type { CreateTaskDto, TaskStatus, TasksType } from '#/types/task.types'
 
 export const addTaskMutationOption = mutationOptions({
-  mutationKey: ['createTask'],
+  mutationKey: ['tasks'],
   mutationFn: ({ title, description, dueDate, subTasks }: CreateTaskDto) =>
     addTaskApi({ title, description, dueDate, subTasks }),
   onError: (err) => {},
   onSuccess: () => {},
 })
+
+export const updateTaskMutationOption = (id: string) =>
+  mutationOptions({
+    mutationKey: ['tasks', id],
+    mutationFn: ({ title, description, dueDate, subTasks }: CreateTaskDto) =>
+      updateTaskApi(id, { title, description, dueDate, subTasks }),
+    onError: (err) => {},
+    onSuccess: () => {},
+  })
 
 export const tasksQueryOptions = queryOptions({
   queryKey: ['tasks'],

@@ -4,19 +4,21 @@ import { Container } from '#/components/Container'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { Button } from '#/components/Button'
-import { AddTaskInput } from './AddTaskInput'
-import type { CreateTaskDto } from '#/types/task.types'
-import { useAddTask } from './hooks/useAddTask'
+import { TaskMutationInput } from './TaskMutationInput'
+import type { CreateTaskDto, TasksType } from '#/types/task.types'
 import { useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { ModalContext } from '#/components/Modal'
+import { useTaskMutation } from './hooks/useUpdateTask'
+import { id } from 'date-fns/locale'
 
-export const AddTaskForm = () => {
+export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
   const queryClient = useQueryClient()
   const { close } = useContext(ModalContext)
   const navigate = useNavigate()
-  const { addTaskHandler } = useAddTask()
+  const { taskMutationHandler } = useTaskMutation(task && task.id)
+
   const {
     register,
     control,
@@ -25,8 +27,17 @@ export const AddTaskForm = () => {
     getValues,
     handleSubmit,
     clearErrors,
+    reset,
     formState: { errors, touchedFields },
-  } = useForm<CreateTaskDto>({ mode: 'onBlur' })
+  } = useForm<CreateTaskDto>({
+    mode: 'onBlur',
+    defaultValues: task || {
+      title: '',
+      description: '',
+      dueDate: undefined,
+      subTasks: [],
+    },
+  })
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -52,13 +63,27 @@ export const AddTaskForm = () => {
   }
 
   function onSubmitHandler(data: CreateTaskDto) {
-    addTaskHandler(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['tasks'] })
-        close()
-        navigate({ to: '/tasks', replace: true })
-      },
-    })
+    if (!task) {
+      console.log('calling creation')
+      taskMutationHandler(data, {
+        onSuccess: () => {
+          reset()
+          queryClient.invalidateQueries({ queryKey: ['tasks'] })
+          close()
+          navigate({ to: '/tasks', replace: true })
+        },
+      })
+    } else {
+      console.log('calling updation')
+      taskMutationHandler(data, {
+        onSuccess: () => {
+          reset()
+          queryClient.invalidateQueries({ queryKey: ['tasks'] })
+          close()
+          navigate({ to: '/tasks', replace: true })
+        },
+      })
+    }
   }
 
   return (
@@ -66,7 +91,7 @@ export const AddTaskForm = () => {
       <Container className="">
         <CardWrapper className="max-w-[min(95%,550px)] max-h-150 overflow-auto mx-auto">
           <header>
-            <h2>Add New Task</h2>
+            <h2>{task && task.id ? 'Update Task' : 'Add New Task'}</h2>
           </header>
 
           <form
@@ -75,7 +100,7 @@ export const AddTaskForm = () => {
             className=" mt-12 space-y-6"
             onSubmit={handleSubmit(onSubmitHandler)}
           >
-            <AddTaskInput
+            <TaskMutationInput
               key={'init'}
               control={control}
               register={register}
@@ -86,7 +111,7 @@ export const AddTaskForm = () => {
               {fields.length > 0 ? <h3>SubTasks</h3> : <></>}
               {fields.map((subTasks, i) => (
                 <div key={`subtask-${i}`} className="space-y-3 grid">
-                  <AddTaskInput
+                  <TaskMutationInput
                     index={i}
                     control={control}
                     errors={errors}
@@ -115,7 +140,7 @@ export const AddTaskForm = () => {
               </Button>
 
               <Button type="button" isSubmitButton>
-                Add Task
+                {task && task.id ? 'Update Task' : 'Add Task'}
               </Button>
             </div>
           </form>

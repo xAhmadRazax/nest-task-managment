@@ -10,7 +10,31 @@ export async function addTaskApi({
   subTasks,
 }: CreateTaskDto) {
   try {
+    console.log('create Api')
     const { data } = await axios.post('tasks', {
+      title,
+      description,
+      dueDate,
+      subTasks,
+    })
+    return data
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log('backend error:', error.response?.data) // ← actual error
+      console.log('status:', error.response?.status)
+      console.log('payload sent:', { title, description, dueDate, subTasks }) // ← what you sent
+    }
+    throw error // ← rethrow so caller knows it failed
+  }
+}
+
+export async function updateTaskApi(
+  id: string,
+  { title, description, dueDate, subTasks }: CreateTaskDto,
+) {
+  try {
+    console.log('update Api')
+    const { data } = await axios.patch(`tasks/${id}`, {
       title,
       description,
       dueDate,

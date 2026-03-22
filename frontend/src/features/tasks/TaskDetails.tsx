@@ -10,6 +10,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Button } from '#/components/Button'
 import { DeleteTask } from './DeleteTask'
 import { DeleteTaskButton } from './DeleteTaskButton'
+import { TaskMutationButton } from './TaskMutationButton'
 
 export const TaskDetails = ({
   id,
@@ -70,12 +71,15 @@ export const TaskDetails = ({
 
           <div className="mt-8 flex justify-between">
             <DeleteTaskButton id={id} />
-            <Button
+            {/* <Button
               type="button"
               className="bg-primary/60 w-fit hover:bg-primary/50"
             >
               Edit
-            </Button>
+            </Button> */}
+            <TaskMutationButton
+              task={{ id, title, description, status, dueDate, subTasks }}
+            />
           </div>
         </article>
       </CardWrapper>

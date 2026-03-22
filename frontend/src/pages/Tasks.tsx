@@ -4,6 +4,7 @@ import { Container } from '#/components/Container'
 import { AddTask } from '#/features/tasks/AddTask'
 import { useTasks } from '#/features/tasks/hooks/useTasks'
 import { Task } from '#/features/tasks/Task'
+import { TaskMutationButton } from '#/features/tasks/TaskMutationButton'
 
 export const TaskPage = () => {
   const { data: tasks } = useTasks()
@@ -12,7 +13,9 @@ export const TaskPage = () => {
       <Container>
         <header className=" text-primary-foreground flex justify-between mt-4 ">
           <h2 className="text-2xl">Tasks</h2>
-          <AddTask />
+          <div className="flex justify-center">
+            <TaskMutationButton />
+          </div>
         </header>
 
         <div className=" mt-6 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8">

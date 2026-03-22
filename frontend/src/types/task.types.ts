@@ -23,7 +23,7 @@ export interface BasicTaskType {
   title: string
   description: string
   dueDate: Date
-  createdAt: Date
+  createdAt?: Date
   status: TaskStatus
 }
 
