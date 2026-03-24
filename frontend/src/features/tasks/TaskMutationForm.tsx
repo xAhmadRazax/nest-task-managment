@@ -10,7 +10,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { ModalContext } from '#/components/Modal'
-import { useTaskMutation } from './hooks/useUpdateTask'
+import { useTaskMutation } from './hooks/useTaskMutation'
 import { toast } from 'sonner'
 import { Spinner } from '#/components/ui/spinner'
 import { isAxiosError } from 'axios'
@@ -70,9 +70,6 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
       taskMutationHandler(data, {
         onSuccess: () => {
           toast.info('Task has been added successfully')
-          reset()
-          queryClient.invalidateQueries({ queryKey: ['tasks'] })
-          close()
           navigate({ to: '/tasks', replace: true })
         },
         onError: (err) => {
@@ -81,6 +78,11 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
               'Something went wrong while creating Task, please try later',
           )
         },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: ['tasks'] })
+          reset()
+          close()
+        },
       })
     } else {
       toast.info('Task Updating Process is in action, please wait')
@@ -88,7 +90,6 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
         onSuccess: (updatedTask) => {
           toast.success('Task has been updated successfully')
           queryClient.setQueryData(['task', task.id.toString()], updatedTask)
-          queryClient.invalidateQueries({ queryKey: ['tasks'] })
           reset()
           close()
           navigate({ to: '/tasks', replace: true })
@@ -98,6 +99,9 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
             ? err.response?.data?.message
             : 'Something went wrong, please try later'
           toast.error(message)
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: ['tasks'] })
         },
       })
     }

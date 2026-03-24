@@ -22,7 +22,7 @@ export const Task = ({
         {/* Header */}
         <div className="flex flex-col space-y-3">
           <div className="ml-auto w-fit ">
-            <TaskStatusTransition id={id} status={status} />
+            <TaskStatusTransition disabled={true} id={id} status={status} />
           </div>
 
           <h3 className="text-xl font-semibold leading-tight">{title}</h3>

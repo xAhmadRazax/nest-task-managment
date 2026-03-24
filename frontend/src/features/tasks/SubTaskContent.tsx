@@ -15,7 +15,9 @@ import { cn } from '#/lib/utils'
 export const SubTaskContent = ({
   tasks,
   disableStatusUpdates = false,
+  parentTaskId,
 }: {
+  parentTaskId: string
   tasks: TasksType[]
   disableStatusUpdates?: boolean
 }) => {
@@ -28,14 +30,16 @@ export const SubTaskContent = ({
         <AccordionItem
           key={task.id}
           value={task.id}
-          className={cn(
-            'pb-3 border-b border-primary/20',
-            task.status === TaskStatus.DONE && 'text-primary line-through',
-            task.status === TaskStatus.ABANDONED &&
-              'text-yellow-400 line-through',
-          )}
+          className="pb-3 border-b border-primary/20"
         >
-          <AccordionTrigger className={'py-1 text-base font-medium '}>
+          <AccordionTrigger
+            className={cn(
+              'py-1 text-base font-medium',
+              task.status === TaskStatus.DONE && 'text-primary line-through',
+              task.status === TaskStatus.ABANDONED &&
+                'text-yellow-400 line-through',
+            )}
+          >
             {task.title}
           </AccordionTrigger>
 
@@ -49,11 +53,12 @@ export const SubTaskContent = ({
               </p>
             )}
 
-            <div className="flex justify-between line-clamp-none">
+            <div className="flex justify-between ">
               <TaskStatusTransition
                 id={task.id}
                 status={task.status}
                 disabled={disableStatusUpdates}
+                parentTaskId={parentTaskId.toString()}
               />
               <DeleteTaskButton navigateAway={false} id={task.id} />
             </div>

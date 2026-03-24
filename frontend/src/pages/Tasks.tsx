@@ -4,7 +4,7 @@ import { Task } from '#/features/tasks/Task'
 import { TaskMutationButton } from '#/features/tasks/TaskMutationButton'
 
 export const TaskPage = () => {
-  const { data: tasks } = useTasks()
+  const { data: tasks, isLoading } = useTasks()
   return (
     <section className="">
       <Container>

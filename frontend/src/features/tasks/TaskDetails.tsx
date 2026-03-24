@@ -11,6 +11,7 @@ import { Button } from '#/components/Button'
 import { DeleteTask } from './DeleteTask'
 import { DeleteTaskButton } from './DeleteTaskButton'
 import { TaskMutationButton } from './TaskMutationButton'
+import { toast } from 'sonner'
 
 export const TaskDetails = ({
   id,
@@ -21,7 +22,9 @@ export const TaskDetails = ({
   subTasks,
 }: TasksType) => {
   return (
-    <Container className="pt-8 max-w-[min(95%,560px)] h-[calc(100svh-56px)] grid items-center">
+    <Container
+      className={`pt-8 max-w-[min(95%,560px)] h-[calc(100svh-56px)] grid items-center`}
+    >
       <CardWrapper className="py-8">
         <article className="space-y-5">
           {/* Header */}
@@ -54,6 +57,7 @@ export const TaskDetails = ({
             <>
               <div className="pt-2">
                 <SubTaskContent
+                  parentTaskId={id}
                   tasks={subTasks}
                   disableStatusUpdates={
                     status === TaskStatus.DONE ||

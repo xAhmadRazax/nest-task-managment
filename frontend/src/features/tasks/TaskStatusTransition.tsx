@@ -13,26 +13,31 @@ import { statusValidTransition } from '#/types/task.types'
 import type { TaskStatus } from '#/types/task.types'
 import { useQueryClient } from '@tanstack/react-query'
 import { useUpdateTaskStatus } from './hooks/useUpdateTaskStatus'
+import { toast } from 'sonner'
+import { isAxiosError } from 'axios'
 
 export const TaskStatusTransition = ({
   id,
   status,
   disabled = false,
+  parentTaskId,
 }: {
   id: string
   status: TaskStatus
   disabled?: boolean
+  parentTaskId?: string
 }) => {
   const queryClient = useQueryClient()
   const { updateTaskStatusMutation, isLoading, error } = useUpdateTaskStatus(id)
 
   return (
     <Select
-      disabled={disabled}
+      disabled={disabled || isLoading}
       onValueChange={(data) => {
         if (!data) {
           return
         }
+        toast.info('Updating Task Status')
         const formattedValue = (data as string)
           .toUpperCase()
           .split(' ')
@@ -44,8 +49,18 @@ export const TaskStatusTransition = ({
           },
           {
             onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ['task', id] })
+              toast.success('Task status has been updated')
+              const taskId = parentTaskId ? parentTaskId : id
+              queryClient.invalidateQueries({
+                queryKey: ['task', taskId.toString()],
+              })
               queryClient.invalidateQueries({ queryKey: ['tasks'] })
+            },
+            onError: (err) => {
+              const message = isAxiosError(err)
+                ? err.response?.data?.message
+                : 'Something went wrong, please try later'
+              toast.error(message)
             },
           },
         )
