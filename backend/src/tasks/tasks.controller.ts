@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
@@ -16,6 +17,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { CreateSubtaskDto } from './dtos/create-subtasks.dto';
 import { ChangeTaskStatusDto } from './dtos/change-task-status.dto';
 import { UpdateTaskDto } from './dtos/update-task-dto';
+import { FilterTaskDto } from './dtos/filter-task.dto';
 
 @Controller('tasks')
 @UseGuards(AuthGuard)
@@ -23,8 +25,8 @@ export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Get('/')
-  findAllTask(@GetUserId() id: string) {
-    return this.taskService.findAll(id);
+  findAllTask(@GetUserId() id: string, @Query() filters: FilterTaskDto) {
+    return this.taskService.findAll(id, filters);
   }
   @Get('/:taskId')
   findTask(@GetUserId() id: string, @Param('taskId') taskId: string) {

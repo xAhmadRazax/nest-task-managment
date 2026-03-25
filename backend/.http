@@ -7,7 +7,7 @@ Content-Type:{{content-type}}
 
 {
     "name":"fake",
-    "email":"fake@fake.com",
+    "email":"fake@fake12.com",
     "password":"Fake123*"
 }
 
@@ -17,7 +17,7 @@ POST {{baseUrl}}/auth/login
 Content-Type:{{content-type}}
 
 {
-    "email":"fake@fake.com",
+     "email":"fake@fake.com",
     "password":"Fake123*"
 }
 
@@ -83,31 +83,31 @@ Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
 {
-    "title":"learn NestJs 2",
+    "title":"learn NestJs 23",
     "description":"ja",
-    "targetDate":"2026-03-29T02:21:15.000Z",
+    "dueDate":"2026-03-29T02:21:15.000Z",
     "subTasks":[{
     "title":"learn NestJs",
     "description":"ja",
-    "targetDate":"2026-03-29T02:21:15.000Z"}
+    "dueDate":"2026-03-29T02:21:15.000Z"}
     ]
 
 }
 
 ### update task
 # @name updateTask
-PATCH {{baseUrl}}/tasks/15
+PATCH {{baseUrl}}/tasks/126
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
 {
-    "title":"learn react Js ",
+    "title":"learn banana 53",
     "description":"ja",
     "targetDate":"2026-03-29T02:21:15.000Z",
-    "subTasks":[{
-        "id":16,
-    "title":"learn learn 1 Caching tool kit and tools"
-    }
+     "subTasks":[{
+    "title":"learn NestJs bone",
+    "description":"ja",
+    "dueDate":"2026-03-29T02:21:15.000Z"}
     ]
 
 }
@@ -115,7 +115,31 @@ Authorization: Bearer {{accessToken}}
 
 ### find All Task
 # @name getAllTasks
-Get {{baseUrl}}/tasks
+Get {{baseUrl}}/tasks?
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+
+
+
+### find All Task with pagination
+# @name getAllTasksPaginationFilter
+Get {{baseUrl}}/tasks?page=2&limit=1
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+
+
+
+### find All Task with search
+# @name getAllTasksSearchFilter
+Get {{baseUrl}}/tasks?search=finish
+Content-Type:{{content-type}}
+Authorization: Bearer {{accessToken}}
+
+###
+# @name getAllTasksStatusFilter
+Get {{baseUrl}}/tasks?status=OPEN
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
@@ -123,7 +147,7 @@ Authorization: Bearer {{accessToken}}
 
 ### find a Task
 # @name getATasks
-Get {{baseUrl}}/tasks/150
+Get {{baseUrl}}/tasks/125
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
@@ -133,21 +157,21 @@ Authorization: Bearer {{accessToken}}
 
 ### add subTasks
 # @name addSubTasks
-Post {{baseUrl}}/tasks/4/subTasks
+Post {{baseUrl}}/tasks/125/subTasks
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
 [{
-    "title":"learn about DTO",
+    "title":"idk mannnnnnnn",
     "description":"ja",
-    "targetDate":"2026-03-28T02:21:15.000Z"
+    "dueDate":"2026-03-28T02:21:15.000Z"
 }
 ]
 
 
 ### change task status
 # @name changeTaskStatus
-PATCH  {{baseUrl}}/tasks/3/status
+PATCH  {{baseUrl}}/tasks/125/status
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}
 
@@ -157,6 +181,6 @@ Authorization: Bearer {{accessToken}}
 
 ### delete Task
 # @name deleteTask
-Delete {{baseUrl}}/tasks/15
+Delete {{baseUrl}}/tasks/125
 Content-Type:{{content-type}}
 Authorization: Bearer {{accessToken}}

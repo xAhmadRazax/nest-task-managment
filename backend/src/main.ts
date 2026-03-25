@@ -12,10 +12,17 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // strips unknown fields
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
       // forbidNonWhitelisted: true, // throws error on unknown fields
     }),
   );
-
+  process.on('unhandledRejection', (reason, promise) => {
+    console.log('UNHANDLED REJECTION AT:', promise);
+    console.log('REASON:', reason);
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

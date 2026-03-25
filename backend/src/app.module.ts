@@ -13,6 +13,8 @@ import { User } from './users/entities/user.entity';
 import { jwtConfig } from './config/jwt.confiq';
 import { BlacklistTokens } from './auth/entities/blackListToken.entity';
 import { Task } from './tasks/entities/task.entity';
+import { APP_FILTER } from '@nestjs/core';
+import { DbExceptionFilter } from './filters/db.exception.filter';
 
 @Module({
   imports: [
@@ -37,6 +39,12 @@ import { Task } from './tasks/entities/task.entity';
     TasksModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: DbExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

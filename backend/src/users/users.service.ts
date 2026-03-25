@@ -19,8 +19,8 @@ export class UsersService {
   }
   //   idk about the things that i need for find filtering
   //   find(email: string) {}
-  create(createUserDto: CreateUserDto) {
-    return this.userRepo.save(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    return await this.userRepo.save(createUserDto);
   }
   delete(id: string) {
     return this.userRepo.delete(id);

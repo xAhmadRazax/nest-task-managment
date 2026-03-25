@@ -5,11 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
-import { DeepPartial, IsNull, Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { TaskStatus } from './types/task.type';
 import { CreateSubtaskDto } from './dtos/create-subtasks.dto';
 import { UpdateTaskDto } from './dtos/update-task-dto';
+import { FilterTaskDto } from './dtos/filter-task.dto';
 
 @Injectable()
 export class TasksService {
@@ -17,11 +18,42 @@ export class TasksService {
     @InjectRepository(Task) private readonly taskRepo: Repository<Task>,
   ) {}
 
-  findAll(userId: string) {
-    return this.taskRepo.find({
-      where: { user: { id: userId }, parent: IsNull() },
-      relations: ['subTasks', 'subTasks.user', 'user'],
-    });
+  async findAll(userId: string, filters: FilterTaskDto) {
+    const { skip, limit, search, status, sortBy, order } = filters;
+
+    const qb = this.taskRepo
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.subTasks', 'subTasks') // 👈 relations
+      .leftJoinAndSelect('task.user', 'user')
+      .where('task.userId = :userId', { userId })
+      .andWhere('task.parentId IS NULL');
+
+    if (search) {
+      qb.andWhere(
+        'task.title ILIKE :search OR task.description ILIKE :search',
+        { search: `%${search}%` },
+      );
+    }
+
+    if (status) {
+      qb.andWhere('task.status = :status', { status });
+    }
+
+    qb.orderBy(`task.${sortBy}`, order).skip(skip).take(limit);
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return {
+      data,
+      meta: {
+        total,
+        page: filters.page,
+        limit: filters.limit,
+        totalPages: Math.ceil(total / filters.limit!),
+        hasNext: filters.page! < Math.ceil(total / filters.limit!),
+        hasPrev: filters.page! > 1,
+      },
+    };
   }
 
   async findOne(userId: string, id: string) {
@@ -226,7 +258,7 @@ export class TasksService {
     tasks: CreateSubtaskDto[],
     parentTask: Task,
   ) {
-    return tasks.map((subTask: Task): DeepPartial<Task> => {
+    return tasks.map((subTask: CreateSubtaskDto): DeepPartial<Task> => {
       const taskEntity = this.taskRepo.create({
         ...subTask,
         user: { id: userId },

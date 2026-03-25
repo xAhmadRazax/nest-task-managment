@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { TaskStatus } from '../types/task.type';
+import { IsOptional } from 'class-validator';
 
 @Entity()
 export class Task {
@@ -21,7 +22,8 @@ export class Task {
   title: string;
 
   @Column()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @Column()
   dueDate: Date;
