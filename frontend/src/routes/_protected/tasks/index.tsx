@@ -1,13 +1,16 @@
 import { TasksLoaderSuspense } from '#/features/tasks/TasksLoaderSuspense'
 import { TaskPage } from '#/pages/Tasks'
 import { tasksQueryOptions } from '#/queries/tasks.query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { tasksSearchSchema } from '#/types/task.types'
+import { createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
 
 export const Route = createFileRoute('/_protected/tasks/')({
   component: RouteComponent,
-  loader: ({ context: { queryClient } }) => {
-    queryClient.ensureQueryData(tasksQueryOptions)
+  validateSearch: tasksSearchSchema,
+  loaderDeps: ({ search }) => ({ filters: search }),
+  loader: ({ context: { queryClient }, deps }) => {
+    queryClient.ensureQueryData(tasksQueryOptions(deps.filters))
   },
 })
 

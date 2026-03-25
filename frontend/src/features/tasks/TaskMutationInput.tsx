@@ -42,7 +42,7 @@ export const TaskMutationInput = ({
         <FieldLabel htmlFor={`${prefix}title`}>Title*</FieldLabel>
         <InputField
           {...register(`${prefix}title` as Path<CreateTaskDto>, {
-            required: true,
+            required: `${prefix}Title is required`,
             minLength: {
               value: 3,
               message: 'min length cant be less than 3',
@@ -50,8 +50,8 @@ export const TaskMutationInput = ({
           })}
           error={
             index !== undefined
-              ? errors.subTasks?.[index]?.title?.message
-              : errors.title?.message
+              ? !!errors.subTasks?.[index]?.title?.message
+              : !!errors.title?.message
           }
         />
       </FieldWrapper>

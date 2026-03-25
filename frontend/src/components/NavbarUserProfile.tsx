@@ -39,9 +39,12 @@ export const NavbarUserProfile = ({ user }: { user: User }) => {
             <MenubarItem
               onClick={() => {
                 logoutHandler(undefined, {
-                  onSuccess: () => {
-                    queryClient.clear()
-                    navigate({ to: '/', replace: true })
+                  onSuccess: async () => {
+                    await queryClient.refetchQueries({
+                      queryKey: ['loginUser'],
+                      exact: true,
+                    })
+                    navigate({ to: '/', replace: true, reloadDocument: true })
                   },
                 })
               }}

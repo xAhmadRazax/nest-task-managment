@@ -1,7 +1,12 @@
 import { axios } from '#/ultis/axios'
 import { isAxiosError } from 'axios'
 
-import type { CreateTaskDto, TaskStatus, TasksType } from '#/types/task.types'
+import type {
+  CreateTaskDto,
+  TaskSearchType,
+  TaskStatus,
+  TasksType,
+} from '#/types/task.types'
 
 export async function addTaskApi({
   title,
@@ -52,9 +57,19 @@ export async function updateTaskApi(
   }
 }
 
-export async function getTasksApi(): Promise<TasksType[]> {
+export async function getTasksApi(filters: TaskSearchType): Promise<{
+  data: TasksType[]
+  meta: {
+    page: number
+    limit: number
+    hasNext: boolean
+    hasPrev: boolean
+    total: number
+    totalPages: number
+  }
+}> {
   try {
-    const { data } = await axios.get('tasks')
+    const { data } = await axios.get('tasks', { params: filters })
     return data
   } catch (error) {
     if (isAxiosError(error)) {

@@ -2,10 +2,11 @@ import {
   addTaskMutationOption,
   updateTaskMutationOption,
 } from '#/queries/tasks.query'
+import type { TaskSearchType } from '#/types/task.types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export function useTaskMutation(id?: string) {
-  const addMutation = useMutation(addTaskMutationOption)
+export function useTaskMutation(filters: TaskSearchType, id?: string) {
+  const addMutation = useMutation(addTaskMutationOption(filters))
   const updateMutation = useMutation(updateTaskMutationOption(id!))
 
   if (id) {

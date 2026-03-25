@@ -4,7 +4,7 @@ import { cn } from '#/lib/utils'
 import { Textarea } from './ui/textarea'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  error?: string
+  error?: boolean
 }
 
 export const InputField = forwardRef<HTMLInputElement, InputProps>(

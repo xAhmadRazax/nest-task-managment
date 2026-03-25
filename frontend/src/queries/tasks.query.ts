@@ -8,36 +8,20 @@ import {
 } from '#/lib/task.service'
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 import type { QueryClient } from '@tanstack/react-query'
-import { TaskStatus } from '#/types/task.types'
 import type {
   BasicTaskType,
   CreateTaskDto,
   TasksType,
+  TaskSearchType,
 } from '#/types/task.types'
+import { TaskStatus } from '#/types/task.types'
 
-export const addTaskMutationOption = mutationOptions({
-  mutationKey: ['tasks'],
-  mutationFn: ({ title, description, dueDate, subTasks }: CreateTaskDto) =>
-    addTaskApi({ title, description, dueDate, subTasks }),
-  onMutate: async (todo, context): Promise<{ previousTodos: TasksType[] }> => {
-    const tempId = `temp-${Date.now()}-${Math.random()}`
-    const tempTodo = { ...todo, status: TaskStatus.OPEN, id: tempId }
-
-    await context.client.cancelQueries({ queryKey: ['tasks'] })
-
-    // Snapshot the previous value
-    const previousTodos = context.client.getQueryData(['tasks'])
-    context.client.setQueryData(['tasks'], (old: TasksType[]) => {
-      console.log(old, 'old')
-      return [...old, tempTodo]
-    })
-
-    return { previousTodos: previousTodos as TasksType[] }
-  },
-  onError: (err) => {},
-  onSuccess: () => {},
-  onSettled: () => {},
-})
+export const addTaskMutationOption = (filters: TaskSearchType) =>
+  mutationOptions({
+    mutationKey: ['tasks'],
+    mutationFn: ({ title, description, dueDate, subTasks }: CreateTaskDto) =>
+      addTaskApi({ title, description, dueDate, subTasks }),
+  })
 
 export const updateTaskMutationOption = (id: string) =>
   mutationOptions({
@@ -71,14 +55,13 @@ export const updateTaskMutationOption = (id: string) =>
 
       return { previousTodos: previousTodos as TasksType }
     },
-    onError: (err) => {},
-    onSuccess: () => {},
   })
 
-export const tasksQueryOptions = queryOptions({
-  queryKey: ['tasks'],
-  queryFn: getTasksApi,
-})
+export const tasksQueryOptions = (filters: TaskSearchType) =>
+  queryOptions({
+    queryKey: ['tasks', filters],
+    queryFn: () => getTasksApi(filters),
+  })
 
 export const taskQueryOptions = (id: string) =>
   queryOptions({

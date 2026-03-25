@@ -6,7 +6,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { Button } from '#/components/Button'
 import { TaskMutationInput } from './TaskMutationInput'
 import type { CreateTaskDto, TasksType } from '#/types/task.types'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { ModalContext } from '#/components/Modal'
@@ -16,10 +16,14 @@ import { Spinner } from '#/components/ui/spinner'
 import { isAxiosError } from 'axios'
 
 export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
+  const searchParams = useSearch({ strict: false })
   const queryClient = useQueryClient()
   const { close } = useContext(ModalContext)
   const navigate = useNavigate()
-  const { taskMutationHandler, isLoading } = useTaskMutation(task && task.id)
+  const { taskMutationHandler, isLoading } = useTaskMutation(
+    searchParams,
+    task && task.id,
+  )
 
   const {
     register,
@@ -46,6 +50,8 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
     name: 'subTasks',
   })
 
+  console.log(errors)
+
   const taskDueDate = getValues('dueDate')
 
   function onAddSubTaskHandler() {
@@ -70,7 +76,7 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
       taskMutationHandler(data, {
         onSuccess: () => {
           toast.info('Task has been added successfully')
-          navigate({ to: '/tasks', replace: true })
+          navigate({ to: '/tasks', replace: true, search: searchParams })
         },
         onError: (err) => {
           toast.error(
@@ -92,7 +98,7 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
           queryClient.setQueryData(['task', task.id.toString()], updatedTask)
           reset()
           close()
-          navigate({ to: '/tasks', replace: true })
+          navigate({ to: '/tasks', replace: true, search: searchParams })
         },
         onError: (err) => {
           const message = isAxiosError(err)
@@ -164,6 +170,12 @@ export const TaskMutationForm = ({ task }: { task?: TasksType }) => {
                 {isLoading && <span>{<Spinner />}</span>}
                 Add subTask
               </Button>
+
+              {Object.keys(errors).length > 0 && (
+                <p className="text-xs text-primary-foreground/90">
+                  Required inputs are missing
+                </p>
+              )}
 
               <Button disabled={isLoading} type="button" isSubmitButton>
                 {isLoading && <span>{<Spinner />}</span>}

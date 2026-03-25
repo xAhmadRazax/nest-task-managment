@@ -2,7 +2,7 @@ import { CardWrapper } from '#/components/CardWrapper'
 import { TaskStatus } from '#/types/task.types'
 import type { TasksType } from '#/types/task.types'
 import { getRemainingDuration } from '#/ultis/date-fns'
-import { Link } from '@tanstack/react-router'
+import { Link, useSearch } from '@tanstack/react-router'
 import { TaskStatusTransition } from './TaskStatusTransition'
 
 interface TypeProps {

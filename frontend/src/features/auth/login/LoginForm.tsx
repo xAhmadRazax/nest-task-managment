@@ -26,6 +26,7 @@ export const LoginForm = () => {
     const password = passwordRef.current?.value
     // for now do if check later use zod parse method to deal with it
     if (!email || !password) {
+      toast.error('Email or password is missing')
       return
     }
 

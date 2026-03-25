@@ -22,6 +22,7 @@ export const RegisterForm = () => {
     const password = passwordRef.current?.value
     // for now do if check later use zod parse method to deal with it
     if (!name || !email || !password) {
+      toast.error('either name  email or password is missing')
       return
     }
 
